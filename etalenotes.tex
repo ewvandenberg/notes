@@ -1,0 +1,811 @@
+\documentclass{article}
+\usepackage[OT1]{fontenc} % Updated from OT1 for better character rendering
+\usepackage[margin=1in]{geometry}
+
+\usepackage[style=alphabetic, backend=biber, useprefix=true]{biblatex}
+% Ensure refs.bib exists in your project folder!
+\addbibresource{refs.bib}
+\renewcommand{\multicitedelim}{\addcomma\space}
+
+\usepackage[dvipsnames]{xcolor}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks = true,
+    linktoc=page,
+    urlcolor = BurntOrange,
+    citecolor = Bittersweet,
+    linkcolor = BurntOrange
+}
+
+\usepackage{enumerate}
+\usepackage{subcaption}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm} 
+\usepackage{mathtools}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usepackage{quiver} 
+
+\usepackage[mathscr]{euscript}
+\usepackage{scalerel}
+\usepackage{wasysym}
+
+\usepackage{titlesec}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries}{\S\thesection}{1em}{}
+
+\setlength{\columnsep}{1cm}
+\parindent = 10pt
+
+% Definitions
+\def\~#1{\mathscr{#1}}
+\def\cal#1{\mathcal{#1}}
+\def\To#1{\xrightarrow{#1}}
+
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+
+\newcommand{\figref}[1]{Figure \ref{#1}}
+\newcommand{\vp}{\varphi}
+\newcommand{\ve}{\varepsilon}
+
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\A}{\mathbb{A}}
+\newcommand{\G}{\mathbb{G}}
+\newcommand{\Hom}{\mathrm{Hom}}
+\newcommand{\Aut}{\mathrm{Aut}}
+\newcommand{\Ext}{\mathrm{Ext}}
+\newcommand{\Der}{\mathrm{Der}}
+\newcommand{\GL}{\mathrm{GL}}
+\newcommand{\PGL}{\mathrm{PGL}}
+\newcommand{\M}{\mathrm{M}}
+\newcommand{\Br}{\mathrm{Br}}
+\newcommand{\Az}{\mathrm{Az}}
+\newcommand{\isom}{\xrightarrow{\sim}}
+\newcommand{\epi}{\twoheadrightarrow}
+\newcommand{\mono}{\hookrightarrow}
+\newcommand{\Spec}{\mathop{\mathrm{Spec}}}
+\newcommand{\sHom}{\~H\mathrm{om}}
+
+
+% Category theory symbols
+\newcommand{\op}{\mathrm{op}}
+\newcommand{\adj}{\dashv}
+\newcommand{\dom}{\mathrm{dom}}
+\newcommand{\colim}{\mathop{\mathrm{colim}}}
+\newcommand{\ob}{\mathop{\mathrm{ob}}}
+\newcommand{\cod}{\mathrm{cod}}
+\newcommand{\coker}{\mathop{\mathrm{coker}}}
+\newcommand{\im}{\mathrm{im}}
+\renewcommand{\d}{\partial}
+\newcommand{\id}{\mathrm{id}}
+\newcommand{\res}{\mathrm{res}}
+\newcommand{\et}{\acute{\mathrm{e}}\mathrm{t}}
+\renewcommand{\frak}[1]{\mathfrak{#1}}
+\newcommand{\sep}{\mathrm{sep}}
+\newcommand{\Gal}{\mathrm{Gal}}
+\newcommand{\disc}{\mathrm{disc}}
+
+
+% Categories
+\newcommand{\cAlg}{\mathrm{c}\~{A}\mathrm{lg}}
+\newcommand{\cAlgop}{\cAlg^\op}
+\newcommand{\Set}{\mathrm{Set}}
+\newcommand{\Rel}{\~R\mathrm{el}}
+\newcommand{\Grp}{\mathrm{Grp}}
+\newcommand{\Ab}{\mathrm{Ab}}
+\newcommand{\Ring}{\mathrm{Ring}}
+\newcommand{\cRing}{\mathrm{c}\~{R}\mathrm{ing}}
+\newcommand{\Mod}{\mathrm{Mod}}
+\newcommand{\Vect}{\~V\mathrm{ect}}
+\newcommand{\fdVect}{\mathrm{fd}\~{V}\mathrm{ect}}
+\newcommand{\Top}{\~T\mathrm{op}}
+\newcommand{\Cat}{\~C\mathrm{at}} % Fixed typo from \~Aat
+\newcommand{\Mon}{\~M\mathrm{on}}
+\newcommand{\Open}{\~{O}\mathrm{pen}}
+\newcommand{\Rep}{\~R\mathrm{ep}}
+\newcommand{\Field}{\~F\mathrm{ield}}
+\newcommand{\PSh}{\mathrm{PSh}}
+\newcommand{\Bilin}{\~{B}\mathrm{ilin}}
+\newcommand{\Ch}{\mathrm{Ch}}
+\newcommand{\Sh}{\mathrm{Sh}}
+\newcommand{\Fun}{\mathrm{Fun}}
+\newcommand{\Sch}{\mathrm{Sch}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\LRS}{\mathrm{LRS}}
+
+
+\DeclareFontFamily{U}{dmjhira}{}
+\DeclareFontShape{U}{dmjhira}{m}{n}{ <-> dmjhira }{}
+\DeclareRobustCommand{\yo}{\text{\usefont{U}{dmjhira}{m}{n}\symbol{"48}}}
+
+% Theorem environments
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem*{thm*}{Theorem}
+\newcommand{\thmautorefname}{Theorem}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{lem}[thm]{Lemma}
+\newcommand{\lemautorefname}{Lemma}
+\newtheorem*{lem*}{Lemma}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem*{cor*}{Corollary}
+\newtheorem{conj}[thm]{Conjecture}
+
+\theoremstyle{definition}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem*{defn*}{Definition}
+\newtheorem{ex}[thm]{Example}
+\AtEndEnvironment{ex}{\null\hfill$\Diamond$}
+\theoremstyle{remark}
+\newtheorem*{rmk}{Remark}
+\newtheorem*{rmks}{Remarks}
+\newtheorem*{notation}{Notation}
+
+\renewcommand{\sectionautorefname}{\S}
+
+\title{\'Etale cohomology}
+\author{Elias Vandenberg}
+
+\begin{document}
+\maketitle
+  \tableofcontents
+
+\subsection*{Conventions and Notation}
+All rings and algebras will be assumed to be commutative with identity $1 \ne 0$. The symbol $:=$ indicates that the equality in question is an definition. If $\~C$ is a category and $X$ is an object of $\~C$, we write $X \in \~C$ in place of $X \in \ob(\~C)$. We write $\Hom_{\~C}(X,Y)$ for the collection of morphisms $X \to Y$ in $\~C$. Isomorphisms between objects in a category are denoted by the symbol $\cong$, while $\simeq$ is reserved for equivalences of categories. $\Fun(\~C, \~D)$ denotes the category of functors $\~C \to \~D$. For a scheme $X$, $\Sch_{\!/\!X}$ denotes the category of schemes over $X$, i.e., the slice category over $X$, and we write $\Hom_X(S,T)$ for the hom-sets in this category.
+\section{Derived functors}
+
+We first review some basic facts about derived functors. Since we are interested in cohomology, we restrict our attention to right derived functors. The main reference for this section is Chapter 2 of Weibel's book \cite{weibel}. 
+
+\subsection{Injective resolutions}
+Throughout this section, we work in an abelian category $\~A$. Recall that a \emph{chain complex} $(A_\bullet, \d_\bullet)$ in $\~A$ is a sequence of objects and arrows in $\~A$
+\[\cdots \To{\d_3} A_2 \To{\d_2} A_1 \To{\d_1} A_0 \To{\d_0} A_{-1} \To{\d_{-1}} \cdots\]
+with the property that $\d_n \circ \d_{n+1} = 0$ for all $n \in \Z$. Reversing the arrows, we obtain the definition of a \emph{cochain complex} $(A^\bullet, \d^\bullet)$. Denote by $\Ch_\bullet(\~A)$ (resp. $\Ch^\bullet(\~A)$) the category of chain (resp. cochain) complexes in $\~A$. A \emph{chain homotopy} $\psi: f \simeq g$ (or $\psi: f \To{\simeq} g$) between chain maps $f,g: A_\bullet \to B_\bullet$ in $\Ch(\~A)$ is a sequence of morphisms 
+\[\{(\psi_n: A_n \to B_{n + 1}) \in \~A : n \in \Z\}\]
+with the property that 
+\[f_n - g_n = \d^B \circ \psi_n + \psi_{n-1} \circ \d^C\]
+for each $n \in \Z$.
+\begin{rmk}
+    In the literature, chain homotopies are often illustrated using diagrams of the form 
+\[\begin{tikzcd}[column sep = scriptsize]
+    \vdots && \vdots \\
+    {A_{n+1}} && {B_{n+1}} \\
+    {A_n} && {B_n} \\
+    {A_{n-1}} && {B_{n-1}} \\
+    \vdots && \vdots
+    \arrow[from=1-1, to=2-1]
+    \arrow[from=1-3, to=2-3]
+    \arrow["{f_{n+ 1} - g_{n+1}}", from=2-1, to=2-3]
+    \arrow["{\d^A}"', from=2-1, to=3-1]
+    \arrow["{\d^B}", from=2-3, to=3-3]
+    \arrow["{\psi_n}"{description}, from=3-1, to=2-3]
+    \arrow["{f_n - g_n}", from=3-1, to=3-3]
+    \arrow["{\d^A}"', from=3-1, to=4-1]
+    \arrow["{\d^B}", from=3-3, to=4-3]
+    \arrow["{\psi_{n-1}}"{description}, from=4-1, to=3-3]
+    \arrow["{f_{n-1} - g_{n-1}}"', from=4-1, to=4-3]
+    \arrow[from=4-1, to=5-1]
+    \arrow[from=4-3, to=5-3]
+\end{tikzcd}\]
+note however that this is \emph{not} a commutative diagram. To avoid any confusion, we will refrain from using such diagrams.
+\end{rmk}
+\begin{defn}
+    $I \in \~A$ is \emph{injective} if for each injection $f: A \mono B$ and each map $\alpha: A \to I$, there is an arrow $\beta: B \to I$ (not necessarily unique) rendering the following diagram commutative:
+    \[\begin{tikzcd}
+    0 & A & B \\
+    && I
+    \arrow[from=1-1, to=1-2]
+    \arrow["f", hook, from=1-2, to=1-3]
+    \arrow["\alpha"', from=1-2, to=2-3]
+    \arrow["{\exists\beta}", from=1-3, to=2-3]
+\end{tikzcd}\]
+Equivalently, $I$ is injective if the contravariant hom-functor $X \mapsto \Hom_{\~A}(X, I)$ is exact.
+\end{defn}
+
+\begin{defn}
+    $\~A$ is said to have \emph{enough injectives} if for every object $A \in \~A$ there is an injection $A \mono I$ with $I \in \~A$ injective.  
+\end{defn}
+
+\begin{defn}
+    A \emph{right resolution} of $A \in \~A$ is a cochain complex $I^\bullet$ with $I^i = 0$ for $i < 0$ and a map $A \to I^0$ such that the complex 
+    \[0 \to A \to I^0 \to I^1 \to I^2 \to \cdots\]
+    is exact. An \emph{injective resolution} of $A \in \~A$ is a right resolution of $A$ with the property that each $I^i$ is injective.
+\end{defn}
+A useful result will be the following:
+\begin{lem}
+    If $\~A$ has enough injectives, then every object in $\~A$ has an injective resolution.
+\end{lem}
+
+\subsection{Definition of derived functors}
+Let $\~A$ be an abelian category with enough injectives, and suppose $F: \~A \to \~B$ is a left exact functor into another abelian category $\~B$. Recall this means that for each exact sequence $0 \to A \to B \to C \to 0$ in $\~A$, the sequence
+\[0 \to F(A) \to F(B) \to F(C)\]
+is exact in $\~B$. The main issue with such a sequence is, of course, the failure of exactness on the right. Right derived functors arise as a means of remedying this issue. Given our left-exact functor $F: \~A \to \~B$, our goal is to ``derive'' a series of functors $R^iF : \~A \to \~B$ with the following two properties:
+\begin{enumerate}
+    \item $R^0F = F$
+    \item Given a short exact sequence $0 \to A \to B \to C \to 0$ in $\~A$, applying the functors $R^iF$ yields a long exact sequence
+    \begin{equation}\label{eq:right_derived_les1}\begin{tikzcd}[sep = scriptsize]
+    0 & F(A) & F(B) & F(C) \\
+    & {R^1F(A)} & {R^1F(B)} & {R^1F(C)} \\
+    & {R^2F(A)} & \cdots
+    \arrow[from=1-1, to=1-2]
+    \arrow[from=1-2, to=1-3]
+    \arrow[from=1-3, to=1-4]
+    \arrow[from=1-4, to=2-2]
+    \arrow[from=2-2, to=2-3]
+    \arrow[from=2-3, to=2-4]
+    \arrow[from=2-4, to=3-2]
+    \arrow[from=3-2, to=3-3]
+\end{tikzcd}\end{equation}
+\end{enumerate}
+
+\begin{defn} 
+Suppose $F: \~A \to \~B$ is an exact functor between abelian categories with $\~A$ having enough injectives. Given $A \in \~A$, take an injective resolution
+\[I_A^\bullet : ~ 0 \to A \to I^0 \To{\d} I^1 \To{\d} I^2 \To{\d} \cdots\]
+and apply $F$ to get a new complex
+\[F(I_A^\bullet) : ~ 0 \to F(A) \to F(I^0) \To{F(\d)} F(I^1) \To{F(\d)} F(I^2) \To{F(\d)} \cdots\]
+We then define the \emph{right derived functors} $R^i F$ ($i \ge 0$) of $F$ by 
+\begin{equation}R^iF(A) := H^i(F(I_A^\bullet)) = \ker\left(F\left(\d^i\right)\right)/~\im\left(F(\d^{i-1})\right).\end{equation}
+\end{defn}
+From this definition, it is not immediately clear that the functors $R^iF$ are well-defined: the definition depends on a \emph{choice} of injective resolution $A \to I^\bullet$, and it is not at all obvious that two different injective resolutions of $A$ will give rise to the same right-derived functor. To prove that the functors $R^iF$ are well-defined, we will need two additional results:
+\begin{lem}\label{lem:chain_homotopy_lem}
+    Chain homotopic maps induce the same maps on (co)homology.
+\end{lem}
+% \begin{proof}
+%     It suffices to prove the result for homology. Suppose $(A_\bullet,  B_\bullet \in \Ch_\bullet(\~A)$, and take 
+% \end{proof}
+\begin{thm}[Comparison theorem, \cite{weibel} Theorem 2.3.7]\label{thm:comparison}
+     Let $\~A$ be an abelian category with enough injectives, and take $B \in \~A$ and an injective resolution $B \to I^\bullet$. Suppose we have a morphism $f': A \to B$ in $\~A$. Then for every resolution $A \to J^\bullet$, there is a cochain map $f: J^\bullet \to I^\bullet$ lifting $f'$, as depicted in the following diagram:
+     \[\begin{tikzcd}
+    0 & A & {J^0} & {J^1} & {J^2} & \cdots \\
+    0 & B & {I^0} & {I^1} & {I^2} & \cdots
+    \arrow[from=1-1, to=1-2]
+    \arrow[from=1-2, to=1-3]
+    \arrow["{f'}"', from=1-2, to=2-2]
+    \arrow[from=1-3, to=1-4]
+    \arrow["\exists"', from=1-3, to=2-3]
+    \arrow[from=1-4, to=1-5]
+    \arrow["\exists"', from=1-4, to=2-4]
+    \arrow[from=1-5, to=1-6]
+    \arrow["\exists"', from=1-5, to=2-5]
+    \arrow[from=2-1, to=2-2]
+    \arrow[from=2-2, to=2-3]
+    \arrow[from=2-3, to=2-4]
+    \arrow[from=2-4, to=2-5]
+    \arrow[from=2-5, to=2-6]
+\end{tikzcd}\]
+Moreover, $f$ is unique up to homotopy equivalence.
+\end{thm}
+
+We may now easily deduce that the right-derived functors of $F$ are well-defined.
+\begin{cor}
+    Suppose $F: \~A \to \~B$ is an exact functor between abelian categories with $\~A$ having enough injectives. Then the functors $R^iF$ are well-defined.
+\end{cor}
+\begin{proof}
+Take two injective resolutions $I = (A \to I^\bullet)$ and $J = (A \to J^\bullet)$ of $A \in \~A$. By Theorem \ref{thm:comparison} above, we can find a chain map $f: I^\bullet \to J^\bullet$, unique up to homotopy equivalence, which lifts $\id_A: A \to A$:
+     \[\begin{tikzcd}
+    0 & A & {I^0} & {I^1} & {I^2} & \cdots \\
+    0 & A & {J^0} & {J^1} & {J^2} & \cdots
+    \arrow[from=1-1, to=1-2]
+    \arrow[from=1-2, to=1-3]
+    \arrow["{\id_A}"', from=1-2, to=2-2]
+    \arrow[from=1-3, to=1-4]
+    \arrow["\exists"', from=1-3, to=2-3]
+    \arrow[from=1-4, to=1-5]
+    \arrow["\exists"', from=1-4, to=2-4]
+    \arrow[from=1-5, to=1-6]
+    \arrow["\exists"', from=1-5, to=2-5]
+    \arrow[from=2-1, to=2-2]
+    \arrow[from=2-2, to=2-3]
+    \arrow[from=2-3, to=2-4]
+    \arrow[from=2-4, to=2-5]
+    \arrow[from=2-5, to=2-6]
+\end{tikzcd}\]
+As $f, g: I^\bullet \to J^\bullet$ are chain homotopic, so are $F(f), F(g): F(I^\bullet) \to F(J^\bullet)$, therefore by Lemma \ref{lem:chain_homotopy_lem} we have isomorphisms 
+\[H^i(F(I)) \cong H^i(F(J)),\]
+so $R^iF(A)$ is independent of the injective resolution chosen.
+\end{proof}
+
+We now fix an abelian category $\~A$ with enough injectives. To prove that the right derived functors induce the desired long exact sequence (\ref{eq:right_derived_les1}), we will need the following three results from homological algebra:
+\begin{lem}\label{lem:inj_proj_ses}
+    Let $0 \to A \to B \to C \to 0$ be a short exact sequence in $\~A$. If $A$ is injective, then the sequence splits. Dually, if $C$ is projective, then the sequence splits. 
+\end{lem}
+\begin{lem}\label{lem:les_on_cohomology}
+    Given a short exact sequence of complexes in $\Ch^\bullet(\~A)$
+    \[0 \to A^\bullet \to B^\bullet \to C^\bullet \to 0\]
+    there is a long exact sequence in cohomology
+    \[\cdots \to H^{n-1}(B^\bullet) \to H^{n-1}(C^\bullet) \to H^n(A^\bullet) \to H^n(B^\bullet) \to \cdots\]
+\end{lem}
+
+\begin{lem}[Horseshoe lemma]\label{lem:horseshoe}
+    Suppose $\~A$ has enough injectives, and take a short exact sequence $0 \to A \to B \to C \to 0$ in $\~A$. Let $A \to I^\bullet$, $C \to J^\bullet$ be two injective resolutions. Then $B \to I^\bullet \oplus J^\bullet$ defines an injective resolution making the following diagram commute:
+    \[\begin{tikzcd}
+    0 & A & B & C & 0 \\
+    0 & {I^\bullet} & {I^\bullet \oplus J^\bullet} & {J^\bullet} & 0
+    \arrow[from=1-1, to=1-2]
+    \arrow[from=1-2, to=1-3]
+    \arrow[from=1-2, to=2-2]
+    \arrow[from=1-3, to=1-4]
+    \arrow[from=1-3, to=2-3]
+    \arrow[from=1-4, to=1-5]
+    \arrow[from=1-4, to=2-4]
+    \arrow[from=2-1, to=2-2]
+    \arrow[from=2-2, to=2-3]
+    \arrow[from=2-3, to=2-4]
+    \arrow[from=2-4, to=2-5]
+\end{tikzcd}\]
+\end{lem}
+\begin{thm}\label{eq:right_derived_les}
+    Given a short exact sequence
+    \[0 \to A \to B \to C \to 0\]
+    in $\~A$, there is a long exact sequence
+    \begin{equation} \cdots \to R^{i-1}F(C) \to R^iF(A) \to R^iF(B) \to R^iF(C) \to R^{i + 1}F(A) \to \cdots \end{equation}
+\end{thm}
+\begin{proof}
+    Let $0 \to A \To{f} B \To{g} C \to 0$ be an exact sequence and take injective resolutions $A \to I_A^\bullet$ and $C \to I_C^\bullet$. Using Lemma \ref{lem:horseshoe} above, we can produce an injective resolution $B \to I_B^\bullet$ fitting into the commuting diagram
+        \[\begin{tikzcd}
+    0 & A & B & C & 0 \\
+    0 & {I_A^\bullet} & {I_B^\bullet} & {I_C^\bullet} & 0
+    \arrow[from=1-1, to=1-2]
+    \arrow[from=1-2, to=1-3]
+    \arrow[from=1-2, to=2-2]
+    \arrow[from=1-3, to=1-4]
+    \arrow[from=1-3, to=2-3]
+    \arrow[from=1-4, to=1-5]
+    \arrow[from=1-4, to=2-4]
+    \arrow[from=2-1, to=2-2]
+    \arrow[from=2-2, to=2-3]
+    \arrow[from=2-3, to=2-4]
+    \arrow[from=2-4, to=2-5]
+\end{tikzcd}\]
+For an integer $n$, consider the exact sequence $0 \to I_A^n \to I_B^n \to I_C^n \to 0$. As $I_A^n$ is injective, Lemma \ref{lem:inj_proj_ses} tells us that the sequence splits for every $n$: $I^n_B \cong I_A^n \oplus I_C^n$. Moreover, $F$ is exact, so in particular it is additive, therefore the sequence $0 \to F(I_A^n) \to F(I_B^n) \to F(I_C^n) \to 0$ is also split exact for every $n$. This gives a short exact sequence of complexes
+\[0 \to F(I_A^\bullet) \to F(I_B^\bullet) \to F(I_C^\bullet) \to 0\]
+which by Lemma \ref{lem:les_on_cohomology} induces a long exact sequence
+\[\cdots \to H^{n-1}(F(I_B^\bullet)) \to H^{n-1}(F(I_C^\bullet)) \to H^n(F(I_A^\bullet)) \to H^n(F(I_B^\bullet)) \to \cdots\]
+Since $R^nF(A) = H^n(F(I_A^\bullet))$, we obtain the long exact sequence (\ref{eq:right_derived_les}).
+\end{proof}
+Our next definition describes the prototypical example of right derived functors  
+\begin{defn}
+    For each $A \in \Mod_R$, the functor $\Hom_R(A,-)$ is left exact. Its right derived functors are called the \emph{Ext-groups}:
+    \[\Ext^i_R(A,B) := R^i \Hom_R(A, -)(B).\]
+\end{defn}
+
+\begin{ex}
+Let $X$ be a topological space and denote by $\Sh_{\Ab}(X)$ the category of sheaves of abelian groups on $X$. Recall that the \emph{global sections functor} $\Gamma(X, -): \Sh_{\Ab}(X) \to \Ab$ is the functor defined by $\Gamma(X, \~F) := \~F(X)$ for each $\~F \in \Sh_\Ab(X)$. Taking global sections is right adjoint to the constant sheaf functor $A \mapsto \underline{A}$:
+\[\Hom_{\Sh(X)}(\underline{A}, \~F) \cong \Hom_{\Ab}(A, \Gamma(X,\~F)).\]
+In particular, $\Gamma(X, -)$ is left-exact: given a short exact sequence $0 \to \~F \to \~G \to \~H \to 0$ on the same space $X$, the sequence
+\[0 \to\Gamma(X, \~F) \to\Gamma(X, \~G) \to \Gamma(X, \~H) \]
+is exact. To address the failure of right-exactness, we will compute the right derived functors $R^i\Gamma(X, \~F)$, which are called the \emph{cohomology functors of the sheaf $\~F$}. We write $H^i(X, \~F) := R^i\Gamma(X, \~F)$.
+\end{ex}
+
+
+\section{The \'etale site and cohomology}
+
+% \subsection{Differentials}
+
+% For the sake of completeness, we use this section to briefly review the definition of K\"ahler differentials. Let $f: R \to A$ be a ring homomorphism and $M$ an $A$-module. A map of $R$-modules $D: A \to M$ is called an \emph{$R$-linear derivation} (or simply a \emph{derivation}) if it annihilates elements in $f(R)$ and satisfies the \emph{Leibniz rule}:
+% \begin{equation}
+%     D(ab) = aD(b) + bD(a) \quad \text{for all } a, b \in A
+% \end{equation}
+% The set $\Der_R(A, M)$ of all $R$-linear derivations $A \to M$ is itself an $A$-module: For $D, D' \in \Der_R(A, M)$, define $D + D': A \to M$ by $a \mapsto D(a) + D'(a)$, and $cD: A \to M$ by $a \mapsto cD(a)$ for all $c \in A$.
+% Given $R \to A$ as above, the \emph{module of K\"ahler differentials} $\Omega_{A/R}$ is defined as the free $A$-module of the symbols $\{d(a) : a \in A \}$, subject to the following relations for all $a, b \in A$ and all $r \in R$:
+% \begin{enumerate}
+%     \item $d(a + b) = da + db$
+%     \item $d(0) = 0$
+%     \item $d(ra) = r (da)$ 
+%     \item $d(ab) = a(db) + b(da)$ (\emph{Leibniz rule})
+%     \item $d(1) = 0$
+% \end{enumerate}
+% The map $d: A \to \Omega_{A/R}$ given by $d: a \mapsto d(a)$ is a derivation, called the \emph{universal $R$-linear derivation}. Observe that this map is indeed $R$-linear. We often write $da$ in place of $d(a)$.
+
+% \begin{rmk}
+%     While the definition of $\Omega_{A/R}$ works for any ring homomorphism $R \to A$, it is often helpful to restrict our attention to the case where $A$ is itself an $R$-algebra (so the image of $R \to A$ lies in the centre of $A$).
+% \end{rmk}
+
+% \begin{ex}
+% Consider $R[x]$. In theory, there is a generator $dp(x)$ for every $p(x) \in R[x]$, but using our relations, we can reduce things. For instance, $x^2$ can be reduced as follows
+% \[d(x^2) = d(x \cdot x) = xdx + x dx = 2xdx\]
+% and in general, we have $d(x^n) = nx^{n - 1}dx$. Using the module structure, we can then deduce that any $dp(x)$ reduces to a linear combination of $dx$, so the $\Omega_{R[x]/R}$ is the free $R[x]$-module generated by the single symbol $dx$. More generally, we have that $\Omega_{R[x_1, \cdots, x_n]/R}$ is the free $R[x_1, \cdots, x_n]$-module generated by $(dx_1, \cdots, dx_n)$:
+% \[\Omega_{R[x_1, \cdots, x_n]/R} = \bigoplus^n_{i = 1}R[x_1, \cdots, x_n] dx_i\]
+% \end{ex}
+
+\subsection{Review of Grothendieck topologies}
+In this section, we briefly review the theory of Grothendieck sites as described in \cite{SGL}. Suppose $\~C$ is a small category, and denote by $\PSh(\~C) = \Fun(\~C^\op, \Set)$ the category of presheaves on $\~C$. We write $\yo: \~C \to \PSh(\~C)$ for the Yoneda embedding ($\yo(A) = \Hom_{\~C}(-, A)$ for all $A \in \~C$). 
+\begin{defn}
+    A \emph{sieve} $S$ on an object $A \in \~C$ is a subfunctor $S \subseteq \yo(A)$. More concretely, a sieve is a family $S$ of morphisms in $\~C$, all of which have codomain $A$, such that for all $f: B \to A$ in $S$ and all arrows $g: C \to B$, we have $f \circ g \in S$. 
+\end{defn}
+Hence a sieve is a collection of arrows with codomain $A$ which is closed under precomposition. Sieves therefore play a similar role to right ideals in ring theory. If $S$ is a sieve on $A \in \~C$ and $h: B \to A$ is any arrow in $\~C$, we can define a sieve $h^\ast(S)$ on $B$ by 
+\[h^\ast(S) := \left\{g : \cod(g) = B, \, h\circ g \in S \right\}.\]
+Moreover, for any object $A \in \~C$, the collection of all possible maps into $A$ clearly defines a sieve $t_A$, called the \emph{maximal sieve}:
+\[t_A := \left\{f : \cod(f) = A\right\}.\]
+Notice that if $S$ is a sieve on $A \in \~C$, we have 
+\[ S = t_A \iff 1_A \in S, \]
+this is another instance of the similarity between sieves and right ideals.
+
+\begin{defn}\label{defn:GT}
+    A \emph{Grothendieck topology} on a category $\~C$ is a function $J$ which assigns to each object $A \in \~C$ a collection $J(A)$ of sieves on $\~C$, such that:
+    \begin{enumerate}
+        \item \label{GT:1} The maximal sieve $t_A$ is in $J(A)$. 
+        \item \label{GT:2}(\emph{Stability axiom}) If $S \in J(A)$, then $h^\ast(S) \in J(B)$ for any arrow $h: B \to A$.   
+        \item \label{GT:3}(\emph{Transitivity axiom}) If $S \in J(A)$ and $R$ is a sieve on $A$ such that $f^*(R) \in J(B)$ for all $f: B \to A$ in $S$, then $R \in J(A)$.
+    \end{enumerate}
+    A \emph{site} is a pair $(\~C, J)$ consisting of a small category $\~C$ and a Grothendieck topology $J$ on $\~C$.
+\end{defn}
+
+Suppose $(\~C, J)$ is a site. Then if $S \in J(A)$ for some $A \in \~C$, any larger sieve $R \supseteq S$ on $A$ must also lie in $J(A)$. To see this, suppose we have an arrow $h: B \to A$ in $S$. Then certainly $1_B \in h^*(S)$, so $h^*(S) = t_B$, the maximal sieve on $B$. As $h^*(S) \subseteq h^*(R)$, we must also have $h^*(R) = t_B$, hence $h^*(R) \in J(D)$ by Definition \ref{defn:GT}. This is true for all $h: B \to A$ in $S$, so transitivity gives $R \in J(A)$.
+
+We can rephrase the axioms of a Grothendieck topology using the more suggestive terminology of ``coverings''. If $S \in J(A)$, we call $S$ a \emph{covering sieve} and say that $S$ \emph{covers} $A$. We say that $S$ \emph{covers an arrow $f: B \to A$} if $f^*(S)$ covers $B$ (therefore $S$ covers $A$ if and only if $S$ covers the identity arrow on $A$). The axioms for a Grothendieck topology may then be phrased as follows:
+\begin{itemize}
+    \item[1*.] If $S$ is a sieve on $A$ and $f \in S$, then $S$ covers $f$. 
+    \item[2*.] If $S$ covers $F: B \to A$, then $S$ also covers $f \circ g$ for all $g: C \to B$.
+    \item[3*.] If $S$ covers $f: B \to A$ and $R$ is a sieve on $A$ which covers all arrows of $S$, then $R$ covers $f$. 
+\end{itemize}
+More formally we make the following definition:
+\begin{defn}\label{defn:GT2}
+    A \emph{Grothendieck} topology on a category $\~C$ consists of a collection $\Cov(\~C)$ of families of morphisms $\{U_i \to U\}_{i \in I}$ called \emph{coverings of $\~C$}, satisfying the following properties:
+    \begin{enumerate}
+        \item If $V \to U$ is an isomorphism, then $\{V \to U\} \in \Cov(\~C)$.
+        \item If $\{U_i \to U\}_{i \in I} \in \Cov(\~C)$ and for each $i$ we have $\{V_{ij} \to U_i\}_{j \in J_i} \in \Cov(\~C)$, then $\{V_{ij} \to U\}_{i \in I, j \in J_i} \in \Cov(\~C)$.
+        \item If $\{U_i \to U\}_{i \in I} \in \Cov(\~C)$ and $V \to U$ is an arrow in $\~C$, then $U_i \times_{U} V$ exists for all $i$ and $\{U_i \times_{U} V \to V\}_{i \in I} \in \Cov(\~C)$.
+    \end{enumerate}
+\end{defn}
+This definition of a Grothendieck topology is the one most frequently encountered in algebraic geometry.
+
+\subsection{\'Etale morphisms}
+The standard Zariski topology of a scheme is often far too coarse. To remedy this issue, we would like to equip our schemes with a finer topology. In the case of a variety over $\C$, we identify \'etale morphisms with local diffeomorphisms in the topological sense (for instance, covering space maps). These morphisms give rise to a topology (the \'etale topology) which is much finer than the Zariski topology. In this topology, cohomological invariants become much more well-behaved. The main reference for this section is \cite{stacks}.
+
+Throughout this section, we will make frequent reference to \emph{flat} morphisms of schemes. A module $M$ over a ring $R$ is called \emph{flat} if the tensor product functor $(-)\otimes_R M$ is exact, and a ring morphism $R \to A$ is \emph{flat} if $A$ is a flat $R$-module under the action induced by this homomorphism. A morphism $f: X \to Y$ of ringed spaces is \emph{flat at $x \in X$} if the associated ring homomorphism $\~O_{Y, f(x)} \to \~O_{X, x}$ is flat, and we say that $f$ is \emph{flat} if it is flat at every $x \in X$. When $\~F$ is an $\~O_X$-module, we say that $\~F$ is \emph{flat} if the functor 
+\[
+   (-)\otimes_{\~O_X}\~F: \Mod_{\~O_X} \to \Mod_{\~O_X}, \quad \~G \mapsto \~G \otimes_{\~O_X} \~F
+\]
+is exact (for more details, see \S3.9 in \cite{hartshorne}). 
+
+Recall that a morphism of rings $R \to A$ is said to be of \emph{finite type} (or that $A$ is a \emph{finite type $R$-algebra}) if there is $n \in \Z_{\ge 1}$ and a surjection of $R$-algebras $R[x_1, \cdots, x_n] \epi A$. $R \to A$ is of \emph{finite presentation} if there are integers $n, m \in \Z_{\ge 1}$ and polynomials $f_j$ such that $A \cong R[x_1, \hdots, x_n]/\langle f_1, \hdots, f_m \rangle$.
+
+\begin{notation}
+    For a ringed space $(X, \~O_X)$, we denote by $\frak{m}_x$ the maximal ideal of the local ring $\~O_{X,x}$ and $\kappa(x) := \~O_{X,x}/\frak{m}_x$ the residue field of $X$ at $x$.
+\end{notation}
+
+\begin{defn}[\cite{stacks}, Definition \href{https://stacks.math.columbia.edu/tag/01TP}{01TP}]
+    A morphism of schemes $f: X \to Y$ is said to be of \emph{finite presentation} at $x \in X$ if there is an affine open neighbourhood $\Spec(B) = U \subseteq X$ of $x$ and an affine open $\Spec(A) = V \subseteq Y$ with $f(U) \subseteq V$ such that the induced ring map $A \to B$ is of finite presentation. We say $f$ is \emph{locally of finite presentation} if it is of finite presentation at every $x \in X$.
+\end{defn}
+
+\begin{defn}
+    A morphism of rings $A \to B$ is \emph{unramified} if it is of finite type and $\Omega_{B/A} = 0$. 
+\end{defn}
+\begin{defn}[\cite{stacks}, Definition \href{https://stacks.math.columbia.edu/tag/02G4}{02G4}]
+ A morphism of schemes $f: X \to Y$ is said to be \emph{unramified at $x \in X$} if there exists an affine open neighbourhood $\Spec(B) = U \subseteq X$ of $x$ and an affine open $\Spec(A) = V \subseteq Y$ with $f(U) \subseteq V$ such that the induced ring map $A \to B$ is unramified. $f$ is \emph{unramified} if it is unramified at every point in $X$.
+\end{defn}
+
+\begin{defn}[\cite{stacks}, Definition \href{https://stacks.math.columbia.edu/tag/00U1}{00U1}]
+    A morphism of rings $A \to B$ is called \emph{\'etale} if it is smooth (in the sense of \cite{stacks}, Definition \href{https://stacks.math.columbia.edu/tag/00T2}{00T2}) and $\Omega_{B/A} = 0$.
+\end{defn}
+
+\begin{lem}[\cite{stacks}, Lemma \href{https://stacks.math.columbia.edu/tag/00U9}{00U9}]
+    A morphism of rings $A \to B$ is \'etale if and only if 
+    \[B \cong A[x_1, \hdots, x_n]/\langle f_1, \hdots, f_n \rangle\]
+    such that $\Delta = \det\left(\frac{\partial f_i}{\partial x_j}\right)$ is invertible in $B$.
+\end{lem}
+
+\begin{defn}\label{def:etale}
+    A morphism of schemes $(f, f^\sharp): (X, \~O_X) \to (Y, \~O_Y)$ is called \emph{\'etale} if it satisfies any one of the following equivalent properties:
+    \begin{enumerate}
+        \item $f$ is flat and unramified. 
+        \item $f$ is smooth and unramified.
+        \item $f$ is smooth and $\Omega_{X/Y} = 0$.
+        \item \label{et3} $f$ is flat, locally of finite presentation, and for every $y \in Y$, the fibre $f^{-1}(y)$ is a disjoint union of points, each of which is the spectrum of finite separable extension of the residue field $\kappa(y)$.
+        \item For every point $x$ of $X$, there is an affine open neighbourhood $\Spec(S) = U \subseteq X$ of $x$ and an affine open $\Spec(R) = V \subseteq Y$ with $f(U) \subseteq V$ such that the induced ring map $R \to S$ is \'etale. 
+        \item For all affine opens $U \subseteq X$, $V \subseteq Y$ with $f(U) \subseteq V$, the morphism of rings $\~O_Y(V) \to \~O_X(U)$ is \'etale.
+        \item There is an open covering $Y = \bigcup_{j \in J} V_j$ and coverings $f^{-1}(V_j) = \bigcup_{i \in I_j}U_i$ such that $f|_{U_i}: U_i \to V_j$ is \'etale for each $j \in J$, $i \in I_j$.
+        \item There is a covering by open affines $Y = \bigcup_{j \in J} V_j$ and affine open coverings $f^{-1}(V_j) = \bigcup_{i \in I_j} U_i$, such that the composite
+        \[\~O_Y(V_j) \To{f_{V_j}^\sharp} \~O_X(f^{-1}(V_j)) \To{\res_{f^{-1}(V_j), U_i}} \~O_X(U_i)\]
+        is \'etale for each $j \in J$, $i \in I_j$.
+    \end{enumerate}
+\end{defn}
+
+\begin{rmk}
+    The third characterization of \'etale maps described above is (in my opinion) the most confusing, so it worth explaining this in greater detail. Let $f: (X, \~O_X) \to (Y, \~O_Y)$ be a morphism of schemes. Take a point $y \in Y$ and an open neighbourhood $U \subseteq Y$ of $y$ with $U \cong \Spec(R)$. Then $y$ corresponds to a unique prime ideal $\frak{p}$ with $\~O_{Y,y} = R_{\frak{p}}$ and $\kappa(y) = R_{\frak{p}}/\frak{m}_y$, and the composite map 
+    \[R \to R_{\frak{p}} \to \kappa(y)\]
+    induces a morphism of schemes $i_y: \Spec(\kappa(y)) \to Y$. In this situation, the fibre of $f$ over $y$ is given by the pullback $f^{-1}(y) = X \times_Y \text{Spec}(\kappa(y))$:
+\[\begin{tikzcd}
+    {f^{-1}(y)} & X \\
+    {\Spec(\kappa(y))} & Y
+    \arrow[from=1-1, to=1-2]
+    \arrow[from=1-1, to=2-1]
+    \arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=1-1, to=2-2]
+    \arrow["f", from=1-2, to=2-2]
+    \arrow["{{i_y}}"', from=2-1, to=2-2]
+\end{tikzcd}\]
+Definition \ref{def:etale}(3) says that this fibre can be written as a disjoint union
+\[f^{-1}(y) \cong \Spec(L_1) \sqcup \Spec(L_2) \sqcup \cdots \sqcup \Spec(L_n)\]
+with each $L_i$ a finite separable field extension of $\kappa(y)$. In terms of global sections, it means there is a ring isomorphism
+\[\Gamma \left(f^{-1}(y), \~O_{f^{-1}(y)} \right) \cong L_1 \times L_2 \times \cdots \times L_n\]
+(this is a direct consequence of the isomorphism $\Gamma(X \sqcup Y, \~{O}) \cong \Gamma(X, \~{O}) \times \Gamma(Y, \~{O})$).
+\end{rmk}
+
+Our next lemma lists some of the basic properties of \'etale morphisms. These results can all be found in Sections \href{https://stacks.math.columbia.edu/tag/02GH}{02GH} and \href{https://stacks.math.columbia.edu/tag/03PA}{03PA} of \cite{stacks}; we have compiled them into a single lemma for the sake of convenience.
+\begin{lem}\label{lem:etale_properties}
+Let $X, Y$, and $S$ be schemes. 
+\begin{enumerate}
+     \item If $f: X \to Y$ is \'etale, then for all open subschemes $U \subseteq X$, $V \subseteq Y$ with $f(U) \subseteq V$, the restriction $f|_U: U \to V$ is \'etale.
+     \item The composition of two \'etale morphisms is \'etale, and if $X \to S$ and $Y \to S$ are \'etale, then any $S$-morphism $X \to Y$ is \'etale.
+     \item The base change of an \'etale morphism is \'etale.
+     \item Fibred products of \'etale morphisms are \'etale.
+     \item Any open immersion is \'etale.
+     \item An \'etale morphism is open.
+     \item An \'etale morphism is flat.
+\end{enumerate}
+\end{lem}
+\subsection{\'Etale topology and sheaves}
+
+\begin{defn}[\cite{stacks}, Definition \href{https://stacks.math.columbia.edu/tag/0215}{0215}]
+    An \emph{\'etale covering} of a scheme $X$ is a family $\{f_i: U_i \to X\}_{i \in I}$ of morphisms of schemes such that each $f_i$ is \'etale and $X = \bigcup_{i \in I} f_i(U_i)$.
+\end{defn}
+
+\begin{lem}[\cite{stacks}, Lemma \href{https://stacks.math.columbia.edu/tag/0216}{0216}]
+Any Zariski covering is an \'etale covering.
+\end{lem}
+\begin{proof}
+    By definition, a Zariski covering of a scheme $X$ is given by a collection $\{f_i: U_i \to X\}_{i \in I}$ of open immersions, each of which is \'etale by Lemma \ref{lem:etale_properties}(4). This is enough to conclude that $\{f_i: U_i \to X\}_{i \in I}$ gives an \'etale covering of $X$.
+\end{proof}
+
+We now show that the collection of \'etale coverings constitutes a Grothendieck topology (in the sense of Definition \ref{defn:GT2}):
+
+\begin{prop}[\cite{stacks} Lemma \href{https://stacks.math.columbia.edu/tag/0217}{0217}]
+    Let $X$ be a scheme.
+    \begin{enumerate}
+        \item If $X' \to X$ is an isomorphism, then $\{X' \to X\}$ is an \'etale covering of $X$. 
+        \item If $\{U_i \to X\}_{i \in I}$ is an \'etale covering of $X$ and for each $i$ we are given an \'etale covering $\{U_{ij} \to U_i\}_{j \in J_i}$, then $\{U_{ij} \to X\}_{i \in I, j \in J_i}$ is an etale covering. 
+        \item If $\{U_i \to X\}_{i \in I}$ is an \'etale covering and $X \to Y$ is a morphism of schemes, then $\{X \times_Y U_i \to Y\}_{i \in I}$ is an \'etale covering.
+    \end{enumerate}
+\end{prop}
+
+\begin{defn}
+    For a scheme $X$, we define the \emph{\'etale topology} on $\Sch_{/X}$ to be the Grothendieck topology whose coverings are given by \'etale coverings. The \emph{big \'etale site} $\left(\Sch_{/X}\right)_{\et}$ on $X$ is the slice category $\Sch_{/X}$ equipped with the \'etale topology. The \emph{small \'etale site} $X_{\et} \mono \left(\Sch_{/X}\right)_{\et}$ is the full subcategory of $\Sch_{/X}$ consisting of those schemes $U$ over $X$ with $U \to X$ \'etale. By a slight abuse of notation, we often write $U \in X_{\et}$ in place of $(U \to X) \in X_{\et}$.
+\end{defn}
+
+Hence $X_{\et}$ can be viewed as the category whose objects are \'etale morphisms and whose arrows are \'etale morphisms over $X$, where $\{f_i: U_i \to U\}$ covers $U$ if $\coprod_i U_i \epi U$ is surjective.
+
+\begin{rmk}[Size issues \frownie]
+    We have been slightly cavalier with our definition of the big \'etale site. Recall that when defining a Grothendieck site, the underlying category is usually assumed to be small. However, $\Sch_{/X}$ is certainly not a small category, so we must take care when defining a Grothendieck topology in this context. The way to fix this is to choose an ordinal $\alpha$ and consider the full subcategory $\Sch_{/X}^\alpha \mono \Sch_{/X}$ of $\alpha$-bounded subschemes (as defined in \href{https://stacks.math.columbia.edu/tag/000H}{\S000H} of \cite{stacks}). Heuristically, this means we consider only those schemes $(U, \~O_U) \in \Sch_{/X}$ with $|U| \le \alpha$ and $|\~O_U(V)| \le \alpha$ for all $V \in X_{\et}$. The big \'etale site can then be formally defined by equipping $\Sch_{/X}^\alpha$ with the \'etale topology. It is also not immediately obvious why $X_{\et}$ is a site; a full proof of this can be found in \cite{stacks}, Lemma \href{https://stacks.math.columbia.edu/tag/021C}{021C} (the proof boils down to the fact that \'etale maps are locally of finite presentation). We will mostly work with $X_{\et}$ in these notes.
+\end{rmk}
+
+\begin{defn}
+    A \emph{\'etale sheaf} is a sheaf on the site $X_{\et}$. In full detail, this means an \'etale sheaf is a presheaf $\~F: X_{\et}^\op \to \Set$ such that for any $U \in \Sch_{/X}$ and any cover $\{U_i \to U\}_{i \in I}$ of $U$, the diagram
+    \[\~F(U) \to \prod_i \~F(U_i) \rightrightarrows \prod_{i,j} \~F(U_i \times_X U_j)\]
+    is an equalizer. We write $\Sh_{\Ab}(X_{\et})$ for the category of abelian sheaves on $X_{\et}$. We have a \emph{global sections functor}:  
+    \[\Gamma(X, -): \Sh_{\Ab}(X_{\et}) \to \Ab, \quad \~F \mapsto \~F(X)\]
+    which is left-exact. The category $\Sh(X_{\et})$ of all sheaves on the site $X_{\et}$ is called the \emph{\'etale topos}.
+\end{defn}
+
+\begin{rmk}
+$\Sh(X_{\et})$ has all products, and has a terminal object given by $U \mapsto \{\varnothing\}$ for all $U \in X_{\et}$ and an initial object given by the functor $\Hom_{X_{\et}}(-, X)$. $\Sh(X_{\et})$ and $\Sh_{\Ab}(X_{\et})$ have the same terminal object, but their initial objects are not the same. As in ordinary sheaf theory, any $\~F \in \Sh(X_{\et})$ converts disjoint unions into products: $\~F\left(\coprod_i U_i\right) = \prod_i \~F(U_i)$. The topos $\Sh_{\Ab}(X_{\et})$ is an abelian category with enough injectives, so it makes sense to discuss cohomology in this category.
+\end{rmk}
+
+\begin{ex}
+    Let $\~F \in \Sh(X_{\et})$, and consider the empty cover of the empty object $\varnothing$. The product over an empty collection of sets given by $\{\varnothing\}$, so we deduce that $\~F(\varnothing) = \{\varnothing\}$, the final object in $\Set$.
+\end{ex}
+
+\begin{ex}
+    Given a scheme $U$ over another scheme $X$, Yoneda's lemma tells us that the functor 
+    \[X_{\et} \to \Sh(X_{\et}), \quad U \mapsto h_U := \Hom_X(-, U)\]
+    is fully faithful. For any $T \to X$ in $X_{\et}$, the \emph{representable sheaf} $h_U: X_{\et}^\op \to \Set$ is defined by 
+        \[h_U(T) := \Hom_{S}(T,U)\]
+    we say that $\~F \in \Sh(X_{\et})$ is \emph{representable} if there is exists $U \in \Sch_{/X}$ and an isomorphism of sheaves $h_U \cong \~F$. 
+\end{ex}
+
+\begin{ex}
+    We have functors $\G_a: X_{\et}^\op \to \Ab$ and $\G_m: X_{\et}^\op \to \Ab$ given by
+    \[\G_a(U) := \Gamma(U, \~O_U) \quad \text{and} \quad \G_m(U) := \Gamma(U, \~O_U)^\times\]
+    for each $U \in X_{\et}$. $\G_a$ and $\G_m$ define \'etale sheaves on $X_{\et}$ (see \S1.2.7 of \cite{conrad} and \S1.6 of \cite{milne} for more details). For $U \to X$ in $X_{\et}$, we set
+    \[\mu_n(U) = \{ f \in \Gamma(U, \~{O}_U)^\times \mid f^n = 1\}.\]
+    Equivalently, $\mu_n$ can be interpreted as the scheme defined by the equation $t^n - 1$, and $\mu_n(U)$ is the group of $n^{th}$ roots of $1$ in $\Gamma(U, \~O_U)$. 
+    With these definitions, we obtain an exact sequence of \'etale sheaves
+    \[1 \to \mu_n \to \G_m \To{(-)^n} \G_m \to 1,\]
+    which is known as the \emph{Kummer sequence}.
+\end{ex}
+
+\begin{ex}
+    We define presheaves of (not necessarily abelian) groups $\GL_n, \PGL_n: X_{\et}^\op \to \Grp$ by
+    \[\GL_n(U) := \GL_n(\Gamma(U,\~O_U)) \quad \text{and} \quad \PGL_n(U) := \Aut\left(\M_n(\~O_U)\right)\]
+    for each $U \in X_{\et}$. These are in fact \'etale sheaves on $X$ (this follows from the Skolem-Noether theorem, see Corollary 2.4 in chapter IV of Milne's book \cite{milne_etalebook}). Moreover, we have the following exact sequence of \'etale sheaves on $X$:
+    \[1 \to \G_m \to \GL_n \to \PGL_n \to 1\]
+\end{ex}
+
+
+\begin{ex}
+Recall that in ordinary sheaf theory, given sheaves $\~F$ and $\~G$ on the same topological space, we can form a sheaf $\sHom(\~F, \~G)$ (``sheaf hom'') of morphisms $\~F \to \~G$. In the same way, given $\~F, \~G \in \Sh(X_{\et})$, we can define a new \'etale sheaf $\sHom_{\et}(\~F, \~G)$ by the assignment
+\[U \mapsto \Hom_{\Sh(X_{\et})}(\~F|_U, \~G|_U).\]
+\end{ex}
+
+\begin{ex}[The Nisnevich topology]
+    An \'etale morphism $f: Y \to X$ is called a \emph{Nisnevich morphism} if for every $x \in X$ there is some $y \in f^{-1}(x)$ for which the induced map of residue fields $\kappa(x) \to \kappa(y)$ is an isomorphism. This is equivalent to the assertion that $f$ is flat, unramified, locally of finite presentation, and for each point $x \in X$ there is $y \in f ^{-1}(x)$ such that $\kappa(x) \to \kappa(y)$ is an isomorphism. A \emph{Nisnevich covering} of $X$ is a family $\{f_i: U_i \to X\}_{i \in I}$ of \'etale morphisms such that for each point $x \in X$ there exists $i \in I$ and $y \in U_i$ such that $f_i(y) = x$ and the induced map $\kappa(x) \to \kappa(y)$ is an isomorphism. If $|I| = n < \infty$, this condition is equivalent to the morphism $\coprod_{i=1}^n U_i \to X$ being Nisnevich. The Nisnevich covers define coverings in a Grothendieck topology, which is unsurprisingly referred to as the \emph{Nisnevich topology}. It is finer than the Zariski topology but coarser than the \'etale topology, and plays a central role in areas like motivic homotopy theory and $\A^1$-enumerative geometry.
+\end{ex}
+
+\begin{defn}
+    For $n \ge 0$, we define the \emph{$n^{th}$ \'etale cohomology group} of a scheme $X$ by
+    \[H^n_{\et}(X, \~F) := R^n\Gamma(X, \~F)\]
+    where $\Gamma(X, -): \Sh_{\Ab}(X_{\et}) \to \Ab$ is the global sections functor and $H^0_{\et}(X, \~F) = \Gamma(X,\~F)$.
+\end{defn}
+
+With this definition, we obtain for each exact sequence $0 \to \~F \to \~G \to \~H \to 0$ of \'etale sheaves on $X$ a long-exact sequence in \'etale cohomology 
+    \[\begin{tikzcd}[sep = scriptsize]
+    0 &  H^0_{\et}(X, \~F) &  H^0_{\et}(X, \~G) &  H^0_{\et}(X, \~H) \\
+    & { H^1_{\et}(X, \~F)} & { H^1_{\et}(X, \~G)} & { H^1_{\et}(X, \~H) } \\
+    & {H^2_{\et}(X, \~F)} & \cdots
+    \arrow[from=1-1, to=1-2]
+    \arrow[from=1-2, to=1-3]
+    \arrow[from=1-3, to=1-4]
+    \arrow[from=1-4, to=2-2]
+    \arrow[from=2-2, to=2-3]
+    \arrow[from=2-3, to=2-4]
+    \arrow[from=2-4, to=3-2]
+    \arrow[from=3-2, to=3-3]
+\end{tikzcd}\]
+
+\subsection{Brauer groups via \'etale cohomology}
+
+So far we have studied Brauer groups in the context of Azumaya algebras, but we've also seen that these groups have a cohomological description. Recall that for a scheme $X$, an $\~O_X$-algebra $A$ is an \emph{Azumaya algebra} over $X$ if it is a coherent $\~O_X$-module and $A_x$ is an Azumaya algebra over the local ring $\~O_{X, x}$ for every point $x$ of $X$. This is equivalent to the assertion that there is an \'etale (resp. flat) covering such that for each $i$ there exists an $d_i \ge 1$ with $A \otimes_{\~O_X} \~O_{U_i} \cong \M_{d_i}(\~O_{U_i})$ (see Proposition 2.1 in Chapter IV of \cite{milne_etalebook}). We will write $\Br(X)$ for the Brauer group of Azumaya algebras over $X$ (as defined in the previous lectures).
+
+\begin{defn}
+    The \emph{cohomological Brauer group} of a scheme $X$ is defined by
+    \[\Br'(X) := H_{\et}^2(X, \G_m).\]
+\end{defn}
+
+\begin{rmk}
+    You can also define the cohomological Brauer group in the case of sheaves on the big \'etale site.
+\end{rmk}
+
+\begin{thm}
+    For a scheme $X$, there is a canonical injection $\Br_{\Az}(X) \mono H^2_{\et}(X, \G_m)$.
+\end{thm}
+\begin{proof}
+    See \cite{milne_etalebook}, Chapter IV, Theorem 2.5.
+\end{proof} 
+
+It is natural to ask when this map is surjective, but answering this question proves difficult in general. Here are a few known cases:
+\begin{enumerate}
+    \item If $X$ is a quasi-projective scheme, then $\Br(X) \cong \Br'(X)$ (cf. \cite{stacks} \href{https://stacks.math.columbia.edu/tag/0A2J}{\S0A2J}).
+    \item If $X = \Spec(R)$ with $R$ a Henselian local ring (\cite{stacks}, Definition \href{https://stacks.math.columbia.edu/tag/04GF}{04GF}), we have an isomorphism $\Br(X) \cong \Br'(X)$.
+    \item If $X$ is a smooth variety admitting a decomposition $X = X_1 \cup X_2$ with $X_1, X_2$, and $X_1 \cap X_2$ all open affines, then $\Br(X) \cong \Br'(X)$.
+    \item A theorem of Gabber (communicated by de Jong in \cite{deJong_Gabber}) says that $\Br(X) \cong \Br'(X)$ for a scheme $X$ admitting an ample invertible sheaf. This implies for example that $\Br(X) \cong \Br'(X)$ when $X$ is affine, since the trivial line bundle on any affine scheme is ample.
+\end{enumerate}
+
+\subsection{\'Etale site of $\Spec(k)$ and Galois cohomology}
+Fix a field $k$. Our goal in this section is to better understand the relationship between Galois cohomology and \'etale cohomology. This is a nice way of getting acquainted with the small \'etale site, since our attention will be restricted to $\Spec(k)_{\et}$. First, we need to understand what the coverings in this site look like.
+
+\begin{lem}[\cite{stacks}, Lemmas \href{https://stacks.math.columbia.edu/tag/00U3}{00U3} and \href{https://stacks.math.columbia.edu/tag/02GL}{02GL}]\label{lem:etale_in_Speck} \hfill
+\begin{enumerate}
+\item A morphism of rings $k \to S$ is \'etale if and only if there is an isomorphism of $k$-algebras $S \cong \prod_{i=1}^n k_i$ with $k_i/k$ a finite separable extension for all $i$.
+\item A morphism $U \to \Spec(k)$ is \'etale if and only if $U \cong \coprod_{i \in I} \Spec(k_i)$ with $k_i/k$ a finite separable field extension for each $i \in I$.
+\end{enumerate}
+\end{lem}
+
+% \begin{proof}
+%     Applying $\Spec$ to the statement in (1) yields (2), so it suffices to prove (1). If $k'/k$ is a finite separable extension, the primitive element theorem tells us that $k' \cong k(\alpha) \cong k[x]/\langle m_{\alpha} \rangle$, where $m_{\alpha}$ is the minimal polynomial of $\alpha$. As $k'/k$ is separable, we have $\gcd(m_\alpha,m_\alpha') = 1$ (where $m_\alpha'$ is the derivative of $m_\alpha$)
+% \end{proof}
+This immediately gives the following characterization of \'etale coverings of $\Spec(k)$:
+\begin{cor}\label{cor:coverings_in_Speck}
+    The coverings in $\Spec(k)_{\et}$ can be written as 
+   \[\left(\coprod_{j \in J_i} \Spec(k_{ij}) \to \Spec(k) \right)_{i \in I}\]
+   with $k_{ij}/k$ a finite separable extension for all $i,j$.  
+\end{cor}
+If $g: k' \to k''$  is a morphism between finite separable extension of $k$, we get a morphism $\Spec(g): \Spec(k'') \to \Spec(k')$ in $\Spec(k)_{\et}$, so we have an induced map of sets
+\[\~F(g) := \~F\left(\Spec{g}\right) : \~F\left(\Spec{k'}\right) \to \~F\left(\Spec{k''}\right)\]
+with $\~F\left(h\right) \circ \~F\left(g\right) = \~F\left(h \circ g\right)$ for $h: k'' \to k'''$. As $\Spec(g)$ is a map in $\Spec(k)_{\et}$, it is a covering map, hence $\~F(g)$ is injective. 
+
+Suppose $k''/k'$ is Galois with corresponding inclusion $\iota: k' \mono k''$. Given an automorphism $\sigma: k'' \to k''$ fixing $k'$, we get a corresponding automorphism $\sigma^*: \Spec(k'') \to \Spec(k'')$ of schemes over $k'$. The group 
+\[G := \Gal(k''/k') = \Aut(\Spec{k''}/\Spec{k})^\op\]
+acts on $\~F(\Spec(k''))$ via 
+\[\sigma \cdot s = \~F(\sigma^*)(s) \quad \text{for all } s \in \~F(\Spec{k''}).\]
+Moreover, note that the injection
+\[\~F(\iota) : \~F(\Spec{k'}) \mono \~F(\Spec{k''})\] 
+is invariant under this action. 
+
+\begin{lem}\label{lem:etSheaves_Speck}
+    A presheaf $\~F$ on $\Spec(k)_{\et}$ is an \'etale sheaf (of sets) if and only if the following conditions are satisfied:
+    \begin{enumerate}
+        \item For any disjoint union $\coprod_{i \in I} U_i$, we have
+        \[\~F\left(\coprod_{i \in I} U_i\right) = \prod_{i \in I} \~F(U_i)\]
+        \item For all finite separable extensions $k''/k'/k$ with $k''/k'$ Galois, $\~F \left(\Spec{k'}\right) \mono \~F \left(\Spec{k''}\right)$ is injective and $\~F(\Spec{k'}) = \~F(\Spec{k''})^{\Gal(k''/k')}$.
+    \end{enumerate}
+\end{lem}
+\begin{proof}
+Now let $U \in (\Spec{k})_{\et}$ and take an \'etale cover $\{U_i \to U\}$. We are interested in the following equalizer diagram:
+\[\~F(U) \to \prod_i \~F(U_i) \rightrightarrows \prod_{i,j} \~F(U_i \times_X U_j).\]
+Set $V = \coprod_i U_i$. Then we have a surjective \'etale map $V \epi U$, and condition (1) gives $\prod_i \~F(U_i) \cong \~F(V)$. Using the series of isomorphisms
+\begin{align*}
+\~F(V \times_U V) &\cong \~F\left(\coprod_{i}U_i \times_U \coprod_{j}U_j\right) \\ 
+&\cong \~F\left(\coprod_{i,j} (U_i \times_U U_j)\right) \\ 
+&\cong \prod_{i,j} \~F(U_i \times_U U_j)
+\end{align*}
+we can rewrite the sheaf equalizer diagram as follows:
+\[\~F(U) \to \~F\left(V\right) \rightrightarrows \~F(V \times_U V).\]
+Hence it suffices to check the sheaf axioms for coverings consisting of a single \'etale map $\coprod_i U_i \to U$, which by Corollary \ref{cor:coverings_in_Speck} must have the form $\coprod_{i} \Spec(k_i) \to U$ with $k_{i}/k$ a finite separable extension. Therefore it suffices to check the sheaf condition for a single separable extension $k'/k$, and Galois theory tells us that we can find a field $k''$ with $k''/k'$ Galois. We are therefore reduced to the case of a finite separable extension $k''/k'/k$ with $k''/k'$ Galois. To that end, consider the diagram
+\begin{equation}\label{eq:D1}\Spec{k''} \times_{\Spec{k'}} \Spec{k''} \rightrightarrows \Spec{k''} \to \Spec{k'}\end{equation}
+where the maps on the left are the projections. Let $G = \Gal(k''/k')$. We have an isomorphism
+\begin{align*} 
+k'' \otimes_{k'} k'' &\isom \prod_{g \in G} k'' \\
+x \otimes y &\mapsto (xg(y))_{g \in G}
+\end{align*}
+of $k''$ algebras, which allows us rewrite the diagram (\ref{eq:D1}) as follows:
+\begin{equation}\label{eq:D2}\coprod_{g \in G} \Spec{k''} \rightrightarrows \Spec{k''} \to \Spec{k'}\end{equation}
+This diagram is an equalizer if and only if 
+\begin{equation}\prod_{g \in G} \~F(\Spec{k''}) \leftleftarrows \~F(\Spec{k''}) \leftarrow \~F(\Spec{k'})\end{equation}
+is an equalizer, where the top-left map is the diagonal morphism $s \mapsto (s, \hdots, s)$ and the bottom-left map is given by $s \mapsto (gs)_{g \in G}$. For this diagram to be an equalizer, the map $\~F(\Spec{k'}) \mono  \~F(\Spec{k''})$ must be injective and $\~F(\Spec{k'}) = \~F(\Spec{k''})^G$.
+\end{proof}
+\begin{prop}
+    $\G_a$ and $\G_m$ are sheaves on $\Spec(k)_{\et}$. 
+\end{prop}
+
+\begin{proof}
+    It is enough to prove the result for $\G_a$. We need to check that the conditions in Lemma \ref{lem:etSheaves_Speck} are satisfied. Suppose we are given $\coprod_{i \in I}U_i$ with $U_i \in \Spec(k)_{\et}$. Using Lemma \ref{lem:etale_in_Speck}, we can refine this to a disjoint union $\coprod_{i \in I} \Spec(k_i)$ with $k_i/k$ finite separable for all $i \in I$. Then
+    \[\G_a\left(\coprod_{i \in I} \Spec{k_i}\right) = \G_a\left(\Spec{\prod_{i \in I} k_i} \right) = \prod_{i \in I} k_i = \prod_{i\in I} \G_a\left(\Spec{k_i}\right),\]
+    which gives the first condition in Lemma \ref{lem:etSheaves_Speck}. For the second condition, suppose we have finite separable extensions $k''/k'/k$. The map
+    \[\G_a(\Spec{k'}) = k' \to k'' = \G_a(\Spec{k''})\]
+    is injective (it is a morphism of fields), and we know from Galois theory that $E^{\Gal(E/F)} = F$, so 
+    \[\G_a(\Spec{k''})^{\Gal(k''/k')} = (k'')^{\Gal(k''/k')} = k'= \G_a(\Spec{k'}).\]
+    Hence $\G_a$ defines an \'etale sheaf on $\Spec(k)$.
+\end{proof}
+As for ordinary sheaves, the kernel of a morphism of \'etale sheaves is an \'etale sheaf, and $\mu_n$ is the kernel of the morphism
+\begin{align*}(-)^n: \G_m &\to \G_m \\ x &\mapsto x^n\end{align*}
+so we get the following corollary:
+\begin{cor}
+    $\mu_n$ is an \'etale sheaf on $\Spec(k)$.
+\end{cor}
+
+\begin{defn}
+    A \emph{profinite group} is a topological group $G$ satisfying either of the following equivalent conditions:
+    \begin{enumerate}
+        \item $G$ is a filtered limit of discrete finite groups: $G \cong \lim_{i \in \mathbf{I}} G_i$ with $\mathbf{I}$ a filtered category and each $G_i$ discrete (put differently, $G$ is a pro-object in the category of finite groups).
+        \item $G$ is Hausdorff, compact and totally disconnected (the only connected subsets of $G$ are singletons).
+    \end{enumerate}
+\end{defn}
+
+\begin{ex}
+    Any finite group is a profinite group. If $k$ is a field equipped with a choice of separable closure $k^{\sep}$, then the absolute Galois group $G_k := \Gal(k^{\sep}/k)$ is a profinite group: 
+    \[G_k := \varprojlim_{k'/k \text{ finite}} \Gal(k'/k).\]
+    Endowing each of the finite groups $\Gal(k'/k)$ with the discrete topology, $G_k$ inherits a topology called the \emph{Krull topology} (it is just important to know that such a topology exists).
+\end{ex}
+
+\begin{defn}
+If $G$ is a profinite group, a \emph{discrete (left) $G$-set} is a set $M$ equipped with a (left) $G$-action $G \times M \to M$ which is continuous when $M$ is given the discrete topology. This means $G \times M \to M$ is continuous if and only if the stabilizer of every $m \in M$ is an open subgroup of $G$. When $M$ is an abelian group and the $G$-action respects this structure, then we call $M$ a \emph{discrete $G$-module} or \emph{Galois module}. Denote by $\Set_G^\disc$ (resp. $\Mod_G^\disc$) the category of discrete (left) $G$-sets (resp. $G$-modules).
+\end{defn}
+
+\begin{rmk}
+    The category $\Mod^\disc_{G}$ of discrete $G$-modules is an abelian category with enough injectives, so it is a reasonable setting in which to discuss cohomology (for how to construct injectives in this category, see Remark 1.1.4.2 in \cite{conrad}).
+\end{rmk}
+For a profinite group $G$ and a short exact sequence of discrete $G$-modules, taking $G$-invariants gives a left exact functor $M \mapsto M^G$: For a short exact sequence 
+\[0 \to M_1 \to M_2 \to M_3 \to 0\]
+we obtain a left-exact sequence
+\[0 \to M_1^G \to M_2^G \to M_3^G.\]
+\begin{defn}
+For a profinite group $G$ and $M \in \Mod_G^{\disc}$, the \emph{Galois cohomology groups} $H^n(G, M)$ are then defined as the right derived functors of the $G$-invariants functor:
+\[H^n(G, M) := R^n(-)^G.\]
+\end{defn}
+\begin{thm}
+    Let $k$ be a field equipped with a choice of separable closure $k^\sep$, and set $G_k = \Gal(k^\sep/k)$. There is an equivalence of categories $\Sh(\Spec(k)_{\et}) \simeq \Set_{G_k}^\disc$, where $\Set_{G_k}^\disc$ denotes the category of left $G_k$-sets.
+\end{thm}
+\begin{proof}
+    Let $\Sigma = \{k' \supseteq k : k'/k \text{ Galois and } k' \subseteq k^\sep\}$. Given $k' \in \Sigma$, we have a set $\~F(\Spec{k'})$ with a left action by $\Gal(k'/k)$ and for $k'' \in \Sigma$ with $k' \subseteq k'' \subseteq k^\sep$, the previous proposition gives an injection $\~F(\Spec{k'}) \mono \~F(\Spec{k'})$ with $\~F(\Spec{k'}) = \~F(\Spec{k''})^{\Gal(k''/k')}$. Moreover, $\~F(\Spec{k'}) \mono \~F(\Spec{k'})$ is compatible with the Galois action via the surjection $\Gal(k''/k) \epi \Gal(k'/k)$. Define
+    \[M_{\~F} := \varinjlim_{k' \in \Sigma} \~F(\Spec{k'}).\]
+    Then $M_{\~F}$ inherits the structure of a discrete $G_k$-set, and the canonical map $\~F(\Spec{k'}) \to M_{\~F}$ is an isomorphism (of $\Gal(k'/k)$-sets) onto $M_{\~F}^{\Gal(k^\sep/k')}$. The functor $\~F \mapsto M_\~F$ give the desired equivalence. For an explicit proof that this defines an equivalence, see Theorem 1.1.4.3 in \cite{conrad}\footnote{Proving this is \emph{highly} nontrivial; Conrad's proof is over a page long.}.
+\end{proof}
+
+\begin{cor}
+The right-derived functors of the global sections functor on $\Sh_{\Ab}(\Spec(k)_{\et})$ are exactly the Galois cohomology groups for $k^\sep/k$.
+\end{cor}
+
+\begin{prop}[Hilbert 90 for \'etale cohomology]
+    We have $H^1_{\et}(\Spec(k), \G_m) = 0$.
+\end{prop}
+\newpage
+\printbibliography
+\end{document}
