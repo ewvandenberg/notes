@@ -1,0 +1,733 @@
+\documentclass{amsart}
+\usepackage[OT1]{fontenc}
+\usepackage[margin = 1in]{geometry}
+% \parindent = 10pt
+% \setlength{\columnsep}{1cm}
+
+%packages
+\usepackage{amsfonts,amsmath,amssymb,amsthm}
+\usepackage{enumitem}
+\usepackage[mathscr]{euscript}
+\usepackage{tikz-cd}
+\usepackage{wasysym}
+\usepackage{stmaryrd}
+
+%bibliography & hyperlinks
+\usepackage[style = alphabetic, backend=biber, useprefix=true]{biblatex}
+\addbibresource{refs.bib}
+
+\usepackage{hyperref}
+\usepackage[dvipsnames]{xcolor}
+\definecolor{Regalia}{rgb}{0.32, 0.18, 0.5}
+\hypersetup{
+    colorlinks = true,
+    linktoc=page,
+    urlcolor = WildStrawberry,
+    citecolor = Emerald,
+    linkcolor = WildStrawberry,
+}
+
+\setcounter{tocdepth}{2}
+
+\numberwithin{equation}{section}
+
+%define anything useful
+\def\~#1{\mathscr{#1}}
+\def\cal#1{\mathcal{#1}}
+\def\To#1{\xrightarrow{#1}}
+\def\frak#1{\mathfrak{#1}}
+
+%commands{}
+\newcommand{\vp}{\varphi}
+\newcommand{\ve}{\varepsilon}
+\newcommand{\del}{\partial}
+\renewcommand{\H}{\mathbb{H}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\isom}{\xrightarrow{\sim}}
+\newcommand{\epi}{\twoheadrightarrow}
+\newcommand{\mono}{\hookrightarrow}
+\newcommand{\figref}[1]{Figure \ref{#1}}
+\newcommand{\im}{\mathop{\mathrm{im}}}
+\newcommand{\coker}{\mathop{\mathrm{coker}}}
+\newcommand{\rank}{\mathrm{rank}}
+\newcommand{\tr}{\mathrm{tr}}
+\newcommand{\id}{\mathrm{id}}
+\newcommand{\Hom}{\mathrm{Hom}}
+\newcommand{\End}{\mathrm{End}}
+\renewcommand{\mod}[1]{\ (\mathrm{mod}\ #1)}
+\newcommand{\M}{\mathrm{M}}
+\newcommand{\SL}{\mathrm{SL}}
+\renewcommand{\Re}{\mathrm{Re}}
+\renewcommand{\Im}{\mathrm{Im}}
+\newcommand{\law}{\left\langle}
+\newcommand{\raw}{\right\rangle}
+\newcommand{\Log}{\mathrm{Log}}
+\newcommand{\Rc}{\mathrm{Rc}}
+\newcommand{\Sc}{\mathrm{Sc}}
+\newcommand{\Rm}{\mathrm{Rm}}
+\newcommand{\Alt}{\mathrm{Alt}}
+\newcommand{\sgn}{\mathop{\mathrm{sgn}}}
+\newcommand{\tRc}{\overset{\circ}{\Rc}}
+\newcommand{\grad}{\mathop{\mathrm{grad}}}
+\renewcommand{\div}{\mathop{\mathrm{div}}}
+
+
+
+%theorem environments
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem*{thm*}{Theorem}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem*{lem*}{Lemma}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem*{cor*}{Corollary}
+
+
+\theoremstyle{definition}
+\newtheorem{ex}[thm]{Example}
+\AtEndEnvironment{ex}{\null\hfill$\Diamond$}
+\newtheorem{exs}[thm]{Examples}
+\AtEndEnvironment{exs}{\null\hfill$\Diamond$}
+\newtheorem*{notation}{Notation}
+\newtheorem{hw}[thm]{Exercise}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem*{defn*}{Definition}
+
+\theoremstyle{remark}
+\newtheorem*{rmk}{Remark}
+\newtheorem*{rmks}{Remarks}
+\newtheorem*{warn}{Warning}
+
+
+\setcounter{section}{0}
+
+\begin{document}
+
+\title{The Weyl Tensor and Conformally Related Metrics}
+
+\author{Elias Vandenberg}
+\address{Department of Mathematics, Western University}
+\email{evande95@uwo.ca}
+\date{\today}
+
+\maketitle
+\tableofcontents
+
+\section*{Introduction}
+One of the main hurdles that one has to overcome when studying curvature in Riemannian geometry is the inherent complexity of the tensors involved. In its most familiar form, the Riemann curvature tensor $\Rm$ is a $(0,4)$-tensor, which often leads to lengthy and complicated calculations. To remedy this, there are a number of refinements of the Riemann curvature tensor that can introduce, the best-known of which are the Ricci curvature and scalar curvature. The Ricci curvature tensor $\Rc$, formed by contracting the Riemann curvature tensor, can be viewed as a measurement of how the geometry of a Riemannian manifold $(M,g)$ changes as one moves along geodesics in $M$. The scalar curvature is then defined as the trace of the Ricci curvature: $S := \tr_g{\Rc}$, and is the simplest of the curvature invariants. The Ricci and scalar curvatures are not only useful in the context of differential geometry; they make appearances in several well-known equations in physics, most notably the Einstein field equations.
+
+The goal of these notes is to explain how the Riemann, Ricci, and scalar curvatures are related. To do this, we will begin by introducing a special product on $4$-tensors known as the \emph{Kulkarni-Nomizu product} $h\owedge k$, which will be our main computational tool when working with curvature tensors. Using this product, we can combine the Ricci, scalar, and Riemann curvature tensors into a single tensor called the \emph{Weyl tensor} $W$:
+\[W = \Rm - \frac{1}{n-2}\Rc \owedge g + \frac{S}{2(n-1)(n-2)}g \owedge g.\]
+This tensor has the desirable property that on a manifold of dimension $n \ge 3$, the above decomposition is orthogonal (we prove this in Theorem \ref{thm:Rmdecomp}).
+
+As an application, we will consider one of the contexts in which the Weyl tensor is particularly useful, that being the theory of conformally related metrics. If $g$ and $\tilde{g}$ are two Riemannian metrics on the same manifold, we say that $g$ and $\tilde{g}$ are \emph{conformal} to one another if $g = f \tilde{g}$ for some positive function $f$ on $M$. It is natural to ask how the curvature of a Riemannian manifold changes when the metric undergoes a conformal transformation. Surprisingly, the Weyl tensor obeys an incredibly simple transformation law: If $g$ is a Riemannian metric and $\tilde{g} = e^{2f}g$ is a metric conformal to $g$, then the Weyl tensors $W$ and $\widetilde{W}$ of $g$ and $\tilde{g}$ respectively are related by the formula
+\[\widetilde{W} = e^{2f}W.\]
+We prove this relation in Theorem \ref{thm:conformalcurvature}, and show how it can be used to completely classify conformally flat manifolds in dimensions $\ge 4$. The case of dimension $3$ is more subtle, and we will have to introduce some additional machinery to deal with this case. This will allow us to prove the Weyl-Schouten theorem, which provides a complete classification of conformally flat Riemannian manifolds in dimensions $\ge 3$.
+
+\subsection*{Notational conventions} The symbol $:=$ indicates that the equality in question is a definition. We will use the Einstein summation convention throughout these notes, so that the expression $a^iv_i$ corresponds to the sum $\sum_i a^i v_i$. In general, when the same index appears in the upper and lower spot of some monomial, then that term is understood to be summed over all possible values of that index. For a finite-dimensional vector space $V$, we write $\~T^k(V^*)$ (resp. $\~T^k(V)$) for the space of covariant (resp. contravariant) $k$-tensors, and $\~T^{(k,\ell)}(V)$ for the space of mixed $(k, \ell)$-tensors on $V$.
+ 
+\section{Ricci curvature and scalar curvature}
+
+\subsection{Preliminaries} We begin by recalling some concepts that will be used throughout the rest of the notes. Throughout these notes, $(M, g)$ denotes a Riemannian manifold, and $\nabla$ denotes its Levi-Civita connection, with coefficients $\Gamma^k_{ij}$. $\frak{X}(M)$ denotes the space of smooth vector fields on $M$, and $TM$ and $T^*M$ denote the tangent and cotangent bundles of $M$ respectively. Let $U\subseteq M$ be an open subset, and let $(x^1, \ldots, x^n)$ denote a smooth local coordinate system on $U$. With respect to this coordinate system, $g$ can be written as
+\[g = g_{ij} dx^i \otimes dx^j, \quad i, j = 1, \ldots, n,\]
+where each $g_{ij}$ is some smooth function on $U$. For any $p \in U$, we have a matrix $(g_{ij})$ with $g_{ij}(p) =\law \del_i|_p, \del_j|_p \raw$, where $\del_i = \frac{\del}{\del x^i}$. More generally, given a smooth local frame $(E_1, \ldots, E_n)$ for $TM$ on $U$ with coframe $(\ve^1, \hdots, \ve^n)$, we have the following local expression for $g$:
+\[g = g_{ij}\ve^i \ve^j,  \quad i, j = 1, \ldots, n,\]
+where $g_{ij}(p) = \law E_i|_p, E_j|_p \raw$.
+
+Now fix a smooth local frame $(E_i)$ for $TM$ with coframe $(\ve^i)$, and write $g$ locally as $g = g_{ij}\ve^i \ve^j$. Write $\hat{g}$ for the morphism of bundles $TM \to T^*M$ defined by 
+\[\hat{g}(v)(w) := g_p(v,w) \quad \text{for all } p \in M, \, v,w \in T_p M.\]
+Similarly, when $X, Y \in \frak{X}(M)$, we define
+\[\hat{g}(X)(Y) : = g(X,Y).\]
+Writing $X \in \frak{X}(M)$ as $X^iE_i$, the covector $\hat{g}(X)$ can be expressed in local coordinates as 
+\[\hat{g}(X) = \left(g_{ij}X^i\right)\ve^j.\]
+In this situation, we write
+\begin{equation}\label{eq:flat}
+X^\flat := \hat{g}(X) = X_j \ve^j, \quad \text{where } X_j = g_{ij}X^i,\end{equation}
+and we say that $X^\flat$ has been obtained by \emph{lowering an index}. Similarly, writing $\alpha \in T^*M$ as $\alpha_jE^j$, the inverse $\hat{g}^{-1}$ (whose matrix is simply the inverse of the matrix $(g_{ij})$) can be expressed in local coordinates as
+\[\hat{g}^{-1}(\alpha) = g^{ij}\alpha_{j} E_i, \quad \alpha \in T^*M.\]
+We then set
+\begin{equation}\label{eq:sharp}
+    \alpha^\sharp := \hat{g}^{-1}(\alpha) = \alpha^i E_i, \quad \text{where } \alpha^j = g^{ij}\alpha_{j}, 
+\end{equation}
+and say that $\alpha^\sharp$ has been obtained by \emph{raising an index}. When $h$ is a covariant $k$-tensor field on a Riemannian manifold $(M,g)$ for some $k \ge 2$, the \emph{trace of $h$ with respect to $g$} is 
+\begin{equation}\label{eq:tr_g}\tr_g(h) = \tr(h^\sharp),\end{equation}
+where $\tr$ is the usual trace. With respect to a basis, we have
+\begin{equation}\label{eq:tr_g.2}\tr_g(h) = {h_i}^i = g^{ij}h_{ij}.\end{equation}
+
+\subsection{Ricci and scalar curvature} 
+Let us first recall the basic notion of curvature on a Riemannian manifold $(M,g)$. We define a map
+\[R: \frak{X}(M) \times \frak{X}(M) \times \frak{X}(M) \to \frak{X}(M)\]
+by the formula
+\begin{equation}R(X,Y)Z := \nabla_X \nabla_Y Z - \nabla_Y \nabla_X Z - \nabla_{[X,Y]}Z.\end{equation}
+This map is multilinear over $\R$, and it is also multilinear over $C^\infty(M)$, because
+\begin{align*}
+    R(X, fY)Z &= \nabla_X \nabla_{fY} Z - \nabla_{fX}\nabla_X Z - \nabla_{[X, fY]}Z \\ 
+    &= \nabla_X(f\nabla_Y Z) - f \nabla_Y \nabla_X Z - \nabla_{f[X,Y] + (Xf)Y}Z\\
+    &= (Xf)\nabla_Y Z + f \nabla_X \nabla_Y Z  - f \nabla_Y \nabla_X Z  - f\nabla_{[X,Y]}Z - (Xf)\nabla_Y Z\\
+    &= f\left(\nabla_X \nabla_Y - \nabla_Y \nabla_X - \nabla_{[X,Y]}\right)Z\\
+    &= fR(X,Y)Z
+\end{align*}
+Similar arguments show that $R$ is linear over $C^\infty(M)$ in and $X$ and $Z$. By the tensor characterization lemma (\cite{LeeRiemannian}, Lemma B.6), this means that $R$ is a $(1,3)$-tensor field.
+
+For each $X, Y \in \frak{X}(M)$, the map $R(X,Y): \frak{X}(M) \to \frak{X}(M)$ defined by $Z \mapsto R(X,Y)Z$ is a smooth endomorphism $TM \to TM$, called the \emph{curvature endomorphism determined by $X$ and $Y$}. We will adopt the notational convention in Chapter 7 of Lee's book \cite{LeeRiemannian}, so that last index is the contravariant one. This means that with respect to a local coordinate system $(x^i)$, the endomorphism $R$ can be expressed as follows:
+\[R = {R_{ijk}}^\ell dx^i \otimes dx^j \otimes dx^k \otimes \del_\ell,\]
+where the coefficients ${R_{ijk}}^\ell$ are determined by
+\[R(\del_i, \del_j)\del_k = {R_{ijk}}^\ell \del_\ell.\]
+\begin{defn}
+    The \emph{Riemann curvature tensor} $\Rm$ is the $(0, 4)$ tensor obtained by lowering the last index of $R$. In symbols, $\Rm = R^\flat$ (where $\flat$ denotes the lowering operator on indices). It acts on vector fields $X,Y,Z,W$ via the following formula:
+    \[\Rm(X,Y,Z,W) = \law R(X, Y)Z, W \raw_g\]
+\end{defn}
+
+In a smooth local coordinate system $(x^i)$, we can write
+\[\Rm = R_{ijk\ell} dx^i \otimes dx^j \otimes dx^k \otimes dx^\ell.\]
+The Riemann curvature tensor satisfies the following identities:
+\begin{enumerate}
+        \item $\Rm(w,x,y,z) = -\Rm(x, w, y, z)$.
+        \item $\Rm(w,x,y,z) = -\Rm(x, w, z, y)$.
+        \item $\Rm(w,x,y,z) = \Rm(y,z,w,x)$.
+        \item $\Rm(w,x,y,z) + \Rm(x,y,w,z) + \Rm(y,w,x,z) = 0$.
+\end{enumerate}
+\begin{defn}
+    Suppose $(M, g)$ is an $n$-dimensional Riemannian manifold. The \emph{Ricci curvature tensor} $\Rc$ is the $2$-tensor defined by taking the trace of the curvature endomorphism on the first and last indices:
+    \[\Rc(X,Y) := \tr\left(Z \mapsto R(Z,X)Y\right) \quad \text{for all } X,Y,Z \in \frak{X}(M).\]
+\end{defn}
+
+\begin{defn}
+    The \emph{scalar curvature} $S$ is defined by 
+    \[S := \tr_g(\Rc),\]
+    where $\tr_g$ is as defined in (\ref{eq:tr_g}). The \emph{traceless Ricci curvature} is defined as
+    \begin{equation}\label{eq:tracelessricci}
+    \tRc := \Rc - \frac{1}{n}S g.
+    \end{equation}
+\end{defn}
+
+\begin{rmk}
+The Ricci and scalar curvatures are well-known for their appearance in the \emph{Einstein field equation}
+\begin{equation}\label{eq:EFE}
+    \Rc - \frac{1}{2}Sg = T.
+\end{equation}
+Here the manifold of interest is spacetime, which is modelled by a $4$-manifold with a special metric $g$ known as a \emph{Lorentz metric}. $T$ is a symmetric $2$-tensor field called the \emph{stress-energy tensor} which is used to describe the density, momentum and stress of matter and energy at each point in spacetime (see \S7.6 in \cite{LeeRiemannian}). When $T = 0$ in (\ref{eq:EFE}), the equation is called the \emph{vacuum Einstein field equation}.
+\end{rmk}
+
+\section{The Weyl tensor}
+\subsection{The Kulkarni-Nomizu product}
+Now that we have met the curvature tensors $\Rm,\Rc$, and $S$, it is natural to ask how these three tensors are related. To answer this question, we need to construct a special curvature tensor known as the \emph{Weyl tensor}, which will allow us to decompose $\Rm$ into an expression involving $\tRc$ and $S$. 
+
+In this section, we will be interested in covariant $4$-tensors which satisfy the symmetry properties of the Riemann curvature tensor. 
+\begin{defn}\label{def:R(V^*)}
+    We denote by $\~R(V^*) \subseteq \~T^4(V^*)$ the space of covariant $4$-tensors $T$ on $V$ satisfying the following identities:
+    \begin{enumerate}
+        \item $T(w,x,y,z) = -T(x, w, y, z)$.
+        \item $T(w,x,y,z) = -T(x, w, z, y)$.
+        \item $T(w,x,y,z) = T(y,z,w,x)$.
+        \item $T(w,x,y,z) + T(x,y,w,z) + T(y,w,x,z) = 0$.
+    \end{enumerate}
+    (4) is known as the \emph{algebraic Bianchi identity}. An element in $\~R(V^*)$ is called an \emph{algebraic curvature tensor} on $V$.
+\end{defn}
+We begin by computing the dimension of the space $\~R(V^*)$.
+\begin{prop}\label{prop:dimR(V^*)}
+    If $V$ is a vector space of dimension $n$, then 
+    \begin{equation}\label{eq:dimR(V^*)}
+    \dim\~R(V^*) = \frac{n^2(n^2-1)}{12}.
+    \end{equation}
+\end{prop}
+\begin{proof}
+Consider the linear subspace $\~B(V^*) \subseteq \~T^4(V^*)$ consisting of tensors $T \in \~T^4(V^*)$ which satisfy properties (1)-(3) in Definition \ref{def:R(V^*)}. We write $\Lambda^2(V)$ for the vector space of alternating contravariant $2$-tensors on $V$. Recall this means that an element $T \in \Lambda^2(V)$ is a multilinear map $T: V^* \times V^* \to \R$ satisfying $T(\alpha, \beta) = -T(\alpha, \beta)$ for all $\alpha, \beta \in V^*$. Let $\Sigma(\Lambda(V)^*)$ denote the space of symmetric bilinear forms of $\Lambda^2(V)$. We define a map
+\[\Phi: \Sigma^2(\Lambda^2(V)^*) \to \~B(V^*), \qquad \Phi(B)(w,x,y,z) = B(w \wedge x, y \wedge z),\]
+which we claim is an isomorphism. First, observe that $\Phi(B)$ is a linear map which satisfies properties (1)-(3) in Definition \ref{def:R(V^*)}, and therefore lies in $\~B(V^*)$. For instance, (1) follows from the fact that $x \wedge y = -y \wedge x$:
+\begin{align*}
+    -\Phi(B)(x,w,y,z) &= -B(x \wedge w, y\wedge z) \\ 
+    &= B(w \wedge x, y \wedge z) \\ 
+    &= \Phi(B)(w,x,y,z),
+\end{align*}
+and (3) follows from the fact that $B$ is symmetric:
+\begin{align*}
+    \Phi(B)(y, z, w, x) &= B(y \wedge z, w\wedge x) \\ 
+    &= B(w \wedge x, y \wedge z) \\ 
+    &= \Phi(B)(w,x,y,z).
+\end{align*}
+To show that $\Phi$ is an isomorphism, we will construct an inverse $\Psi$ as follows: Let $\{b_1, \ldots, b_n\}$ be a basis for $V$, so $\{b_i \wedge b_j : i \ne j\}$ is a basis for $\Lambda^2(V)$, and define
+\[\Psi: \~B(V^*) \to \Sigma^2(\Lambda^2(V)^*), \qquad \Psi(T)\left(b_i \wedge b_j, b_k \wedge b_\ell \right) = T(b_i,b_j,b_k,b_\ell) \quad \forall\, i \ne j, k \ne \ell.\]
+Then since $\Phi(B)(w,x,y,z) = B(w \wedge x, y \wedge z)$, $\Psi$ is defined precisely so that $\Psi = \Phi^{-1}$. 
+
+Now $\dim \Lambda^2(V) = \binom{n}{2}$ and $\dim \Sigma^2(W) = \frac{m(m+1)}{2}$ for a vector space $W$ of dimension $m$, so in light of the isomorphism demonstrated above, we deduce that
+\begin{align*}
+    \dim \~B(V^*) = \dim \Sigma^2(\Lambda(V)^*) &= \frac{\binom{n}{2}\left(\binom{n}{2} + 1\right)}{2}\\
+    &= \frac{\frac{n(n-1)}{2}\left(\frac{n(n-1)}{2} + 1\right)}{2}\\
+    &= \frac{n(n-1)(n^2 - n + 2)}{8}.
+\end{align*}
+To apply the rank-nullity theorem, we define a map $\pi : \~B(V^*) \to \~T^4(V^*)$ by the formula:
+\[\pi(T)(w, x, y, z) = \frac{1}{3} \left(T(w, x, y, z) + T(x,y,w,z) + T(y,w,x,z)\right).\]
+That is, $\pi$ is defined so that $\ker(\pi) = \~R(V^*)$, in fact, $\pi$ is the restriction $\Alt|_{\~B(V^*)}$, where
+\[\Alt: \~T^4(V^*) \to \Lambda^4(V^*), \qquad \Alt(T)(v_1, v_2, v_3, v_4) = \frac{1}{4!} \sum_{\sigma \in S_4}(\sgn{\sigma})T(v_{\sigma(1)}, v_{\sigma(2)},v_{\sigma(3)}, v_{\sigma(4)}).\]
+Checking this is a simple but tedious calculation: after writing down all 24 terms in the sum and swapping arguments if necessary, we see that the terms in the sum can be regrouped into $3$ groups of $8$, so
+\[\Alt(T)(w,x,y,z) = \frac{8}{4!} \left(T(w, x, y, z) + T(x,y,w,z) + T(y,w,x,z)\right).\]
+Hence $\im(\pi) \subseteq \Lambda^4(V^*)$. Moreover, every $T \in \Lambda^4(V^*)$ lies in $\~B(V^*)$ by definition and $\pi(T) = \Alt(T) = T$, so we in fact have $\im(\pi)=\Lambda^4(V^*)$. Using the rank-nullity theorem, we deduce that
+\[\dim\~R(V^*) = \dim \~B(V^*) - \dim \Lambda^4(V^*) = \frac{n(n-1)(n^2 - n + 2)}{8} - \binom{n}{4},\]
+which simplifies to (\ref{eq:dimR(V^*)}).
+\end{proof}
+
+As in the proof above, we let $\Sigma^2(V^*)$ denote the space of symmetric bilinear forms on $V$.
+
+\begin{defn}
+    The \emph{Kulkarni-Nomizu product} is the operation $\owedge: \Sigma^2(V^*) \to \~T^4(V^*)$ defined for all $h,k \in \Sigma^2(V^*)$ by 
+    \[h \owedge k(w,x,y,z) :=  h(w,z)k(x,y) + h(x,y)k(w,z) - h(w,y)k(x,z) - h(x,z)k(w,y).\]
+    In abstract index notation, we can write the components of $h \owedge k$ with respect to any basis as follows:
+    \[(h \owedge k)_{abcd} = h_{ad}k_{bc} + h_{bc}k_{ad} - h_{ac}k_{bd} - h_{bd}k_{ac}.\]
+\end{defn}
+The following lemma will be our main tool when performing computations involving the Kulkarni-Nomizu product:
+\begin{lem}\label{KNproperties}
+    Let $V$ be a vector space of dimension $n$ and $g$ a scalar product on $V$. Let $h$ and $k$ be symmetric $2$-tensors on $V$, let $T$ be an algebraic curvature tensor on $V$, and let $\tr_g$ denote the trace on the first and last indices. Then
+    \begin{enumerate}
+        \item \label{KN1} $h \owedge k$ is an algebraic curvature tensor, i.e., $h \owedge k \in \~R(V^*)$. 
+        \item \label{KN2} $h \owedge k = k \owedge h$.
+        \item \label{KN3} $\tr_g(h \owedge g) = (n-2)h + (\tr_g h)g$.
+        \item \label{KN4} $\tr_g(g \owedge g) = 2(n-1)g$.
+        \item \label{KN5} $\law T, h \owedge g \raw_g = 4\law \tr_g T, h\raw_g$.
+        \item  \label{KN6}When $g$ is positive-definite, we have $|g \owedge h|_g^2 = 4(n-2)|h|_g^2 + 4(\tr_g h)^2$.
+    \end{enumerate}
+\end{lem}
+\begin{proof}
+    First, notice that (4) follows from (3) since $\tr_g g = n$, and (2) follows immediately from the definition. We are therefore reduced to proving the remaining four identities. 
+
+    To prove (1), we need to verify the axioms in Definition \ref{def:R(V^*)}. The first three axioms are relatively straightforward: We have
+    \begin{align*}
+    -h \owedge k(x,w,y,z) &= - \left(h(x,z)k(w,y) + h(w,y)k(x,z) - h(x,y)k(w,z) - h(w,z)k(x,y)\right)\\
+     &= h \owedge k(w,x,y,z)
+    \end{align*}
+    (the second axiom follows similarly), and symmetry of $h$ and $k$ gives
+    \begin{align*}
+        h \owedge k(y,z,w,x) &= h(y,x)k(z,w) + h(z,w)k(y,x) - h(y,w)k(z,x) - h(z,x)k(y,w) \\
+        &= h \owedge k(w,x,y,z).
+    \end{align*}
+    To verify the algebraic Bianchi identity, one directly computes
+    \begin{align*}
+    &h \owedge k(w,x,y,z) + h \owedge k(x,y,w,z) + h \owedge k(y,w,x,z) \\ 
+    &= \left[h(w,z)k(x,y) + h(x, y)k(w,z) - h(w,y)k(x,z) - h(x,z)k(w,y)\right] \\
+    &+ \left[h(x,z)k(y,w) + h(y,w) k(x,z) - h(x,w)k(y,z) - h(y,z)k(x,w)\right] \\
+    &+ \left[h(y,z)k(w,y) + h(w,x)k(y,z) - h(y,z)k(w,z) - h(w,z) k(y,x)\right],
+    \end{align*}
+    and using the fact that $h$ and $k$ are both symmetric, we see that this expression is equal to $0$. This proves (1).
+
+    For (3), notice that with respect to a choice of basis for $V$, we can write 
+    \begin{align*}
+        \left(\tr_g(h \owedge g)\right)_{bc} &= g^{ad}\left(h_{ad}g_{bc} + h_{bc}g_{ad} - h_{ac}g_{bd} - h_{bd}g_{ac}\right) \\ 
+        &= g^{ad}h_{ad}g_{bc} + g^{ad}h_{bc}g_{ad} - g^{ad}h_{ac}g_{bd} - g^{ad}h_{bd}g_{ac}\\
+        &= \tr_g(h)g_{bc} + g^{ad}h_{bc}g_{ad} - g^{ad}h_{ac}g_{bd} - g^{ad}h_{bd}g_{ac} &  (\ref{eq:tr_g.2})\\ 
+        &=  \tr_g(h)g_{bc} + n h_{bc} - g^{ad}h_{ac}g_{bd} - g^{ad}h_{bd}g_{ac} &  (\text{since } g^{ad}g_{ad} = \delta_d^d = \dim(V) = n)\\ 
+        &= \tr_g(h)g_{bc} + n h_{bc} - g_{bd}h^d_c - \delta_c^d h_{bd}\\
+        &= \tr_g(h)g_{bc} + n h_{bc} - h_{bc} - h_{bc} \\
+        &= (n-2)h_{bc} + \tr_g(h)g_{bc},
+    \end{align*}
+    which is just (3) written in index notation.
+
+    For (5), write 
+    \[(h \owedge g)_{abcd} = h_{ad}g_{bc} + h_{bc}g_{ad} - h_{ac}g_{bd} - h_{bd}g_{ac},\]
+    so
+    \[\law T, h \owedge g \raw_g = T^{abcd}\left(h_{ad}g_{bc} + h_{bc}g_{ad} - h_{ac}g_{bd} - h_{bd}g_{ac}\right).\]
+    After distributing and using the fact that $T \in \~R(V^*)$, each term simplifies to $\law \tr_g(T), h \raw_g$: for example, we have $T^{abcd} = T^{cdab}$, so
+    \[T^{abcd}h_{ad}g_{bc} = T^{cdab}h_{ad}g_{bc} = \left(\tr_g(T)\right)^{da}h_{ad} = \law \tr_g(T), h \raw_g,\]
+    and the remaining terms simplify similarly. Hence
+    \[\law T, h \owedge g \raw_g = \law \tr_g(T), h \raw_g + \law \tr_g(T), h \raw_g + \law \tr_g(T), h \raw_g + \law \tr_g(T), h \raw_g,\]
+    which gives (5). 
+
+    For (6), we first use (5) to write
+    \[|g \owedge h|_g^2 = \law g \owedge h, g \owedge h \raw_g = 4\law \tr_g(g \owedge h), h \raw_g.\]
+    Using (3), we get
+    \begin{align*}
+        \law \tr_g(g \owedge h), h \raw_g &= \law (n-2)h + (\tr_g{h})g, h \raw_g \\ 
+        &= (n - 2)\law h, h \raw_g + \left(\tr_g{h}\right)\law g, h \raw_g \\
+        &= (n - 2)|h|_g^2 + (\tr_g h)^2,
+    \end{align*}
+    so 
+    \[|g \owedge h|_g^2 = 4\law \tr_g(g \owedge h), h \raw_g = 4\left[(n - 2)|h|_g^2 + (\tr_g h)^2\right],\]
+    as desired.
+\end{proof}
+
+\begin{notation}
+    As in Lemma \ref{KNproperties} above, we will adopt the convention that $\tr_g$ denotes the trace on the first and last indices throughout the rest of these notes.
+\end{notation}
+
+The next proposition describes one of the main reasons for studying the Kulkari-Nomizu product:
+\begin{prop}\label{prop:G}
+    Let $V$ be a vector space of dimension $n \ge 3$ and $g$ a scalar product on $V$. Define a linear map $G: \Sigma^2(V^*) \to \~R(V^*)$ by
+    \[G(h) := \frac{1}{n-2}\left(h - \frac{\tr_g h}{2(n-1)}g\right) \owedge g.\]
+    Then $G$ is a right inverse for $\tr_g$, and $\im (G) = \ker(\tr_g)^\perp$.
+\end{prop}
+
+\begin{proof}
+    We first verify that $G$ is a right inverse for $\tr_g$. Indeed, using (\ref{KN3}) and (\ref{KN4}) in Lemma \ref{KNproperties}, one directly computes
+    \begin{align*}
+        \tr_g(G(h)) &= \frac{1}{n-2}\left(\tr_g(h \owedge g) - \frac{\tr_g h}{2(n-1)}\tr_g(g \owedge g)\right)\\
+        &=  \frac{1}{n-2}\left((n-2)h + \tr_g h - \frac{ \tr_g h}{2(n-1)}\cdot 2(n-1)g\right) \\
+        &= \frac{1}{n-2}\left((n-2)h + (\tr_g h)g - (\tr_g h)g \right)\\
+        &= h,
+    \end{align*}
+    so $\tr_g \circ G = \id_{\Sigma^2(V^*)}$.
+
+    To show that $\im(G) = \ker(\tr_g)^\perp$, first note that since $G$ is a right inverse, it is injective, and  $\tr_g$ is surjective, so the rank-nullity theorem gives
+    \[\dim \~R(V^*) = \dim\left(\ker(\tr_g)\right) + \dim\left(\im(\tr_g)\right).\]
+    By surjectivity of $\tr_g$, we see that $\dim\left(\im(\tr_g)\right) = \dim \left(\Sigma^2(V^*)\right)$, and since $G$ is injective, we have $\dim(\ker(G)) = 0$, so $\dim(\im(G)) = \dim(\Sigma^2(V^*))$. We also have
+    \[\dim(\ker(\tr_g)^\perp) = \dim \~R(V^*) - \dim(\ker(\tr_g))\]
+    and
+    \[\dim \Sigma^2(V^*) = \dim \~R(V^*) - \dim \left(\ker(\tr_g)\right),\]
+    so putting everything together, we see that $\dim(\im(G))= \dim(\ker(\tr_g)^\perp)$. Let $T \in \ker(\tr_g)$, so $\tr_g(T) = 0$, and write $G(h) = h' \owedge g$, where $h'= \frac{1}{n-2}\left(h - \frac{\tr_g h}{2(n-1)}g\right)$. Using Lemma \ref{KNproperties}(\ref{KN5}), we get 
+    \begin{align*}
+    \law T, G(h) \raw_g &= \law T, h' \owedge g \raw_g\\
+     &= 4\law \tr_g T, h' \raw_g \\
+     &= 4\law 0, h' \raw_g = 0,
+    \end{align*}
+    hence $\im(G) \subseteq \ker(\tr_g)^\perp$, and $\dim(\im(G)) = \dim(\ker(\tr_g)^\perp)$, therefore $\im(G) = \ker(\tr_g)^\perp$, which proves the claim.
+\end{proof}
+
+In low dimensions, the space $\~R(V^*)$ is easier to describe:
+\begin{cor}\label{cor:R(V^*)dim0-3}
+Let $V$ be a real vector space of dimension $n$.
+\begin{enumerate}
+    \item If $n=0$ or $n=1$, then $\~R(V^*) = \{0\}$.
+    \item If $n = 2$, then $\~R(V^*)$ is $1$-dimensional, spanned by $g \owedge g$.
+    \item If $n=3$, then $\~R(V^*)$ is $6$-dimensional, and the map $G: \Sigma^2(V^*) \to \~R(V^*)$ of Proposition \ref{prop:G} is an isomorphism 
+\end{enumerate}
+\end{cor}
+\begin{proof}
+    All of the dimension statements follow directly from Proposition \ref{prop:dimR(V^*)}, as does (1). When $n = 2$, we can use Lemma \ref{KNproperties} to calculate $\tr_g(g \owedge g) = 2g \ne 0$, hence $g \owedge g \ne 0$, and since $\dim \~R(V^*) = 1$, $g \owedge g$ must span $\~R(V)$. For the $n=3$ case, notice that Proposition \ref{prop:G} tells us that $\tr \circ G$ is the identity, so $G: \Sigma^2(V^*) \to \~R(V^*)$ is injective. Proposition \ref{prop:dimR(V^*)} tells us that $\dim \~R(V^*) = \dim \Sigma^2(V^*) = 6$, which means that $G$ is surjective as well.
+\end{proof}
+
+
+\subsection{The Schouten and Weyl tensors}
+
+\begin{defn}\label{defn:W}
+    For a Riemannian manifold $(M, g)$, the \emph{Schouten tensor} of $g$ is the symmetric $2$-tensor field defined by
+    \[P := \frac{1}{n-2}\left(\Rc - \frac{S}{2(n-1)}g\right).\]
+    The \emph{Weyl tensor} of $g$ is the algebraic curvature tensor field defined by
+    \begin{equation}\label{eq:W}
+        W := \Rm - P \owedge g 
+          = \Rm - \frac{1}{n-2}\Rc \owedge g + \frac{S}{2(n-1)(n-2)}g \owedge g 
+    \end{equation}
+    Notice that the Schouten and Weyl tensors only make sense when the dimension of $M$ is $\ge 3$.
+\end{defn}
+
+\begin{prop}\label{prop:tr_g(W)=0}
+    For every Riemannian manifold $(M, g)$ of dimension $n \ge 3$, we have $\tr_g(W) = 0$, and $\Rm = W + P \owedge g$ is the orthogonal decomposition of $\Rm$ corresponding to $\~R(V^*) = \ker(\tr_g) \oplus \ker(\tr_g)^\perp$.
+\end{prop}
+\begin{proof}
+    We have $G(\Rc) = G(\tr_g{\Rm})$ and $\tr_g \circ G = \id$, so
+    \begin{align*}
+        \tr_g(W) &= \tr_g(\Rm) - \tr_g\left(P \owedge g\right)\\ 
+                 &= \Rc - \tr_g(G(\Rc))\\
+                 &= \Rc - \Rc = 0,
+    \end{align*}
+    which proves the first assertion. For the second statement, note that we have $W \in \ker(\tr_g)$ by the previous calculation, and $P \owedge g = G(\Rc)$, so $P \owedge g \in \im(G)$. Since $G$ is a right inverse for $\tr_g$, we have the decomposition 
+    \[\~R(V^*)  = \ker(\tr_g) \oplus \im(G) = \ker(\tr_g) \oplus \ker(\tr_g)^\perp,\]
+    which completes the proof.
+\end{proof}
+
+\begin{cor}\label{cor:W=0}
+    On a Riemannian manifold $(M, g)$ of dimension $3$, we have $W = 0$, and
+    \begin{equation}\label{Rm_dim3}\Rm = P \owedge g = \Rc \owedge g - \frac{1}{4} S \left(g \owedge g\right).\end{equation}
+    Hence the Riemann curvature tensor is completely determined by the Ricci curvature tensor in dimension $3$.
+\end{cor}
+\begin{proof}
+    As $M$ has dimension $3$, Corollary \ref{cor:R(V^*)dim0-3} tells us that $G: \Sigma^2(V^*) \to \~R(V^*)$ is an isomorphism, and we know from Proposition \ref{prop:G} that $\tr_g \circ G = \id_{\Sigma^2(V^*)}$, so $\tr_g$ must also be an isomorphism. Now $\tr_g W = 0$ by Proposition \ref{prop:tr_g(W)=0}, which implies $W = 0$. The decomposition (\ref{Rm_dim3}) is obtained by substituting $n=3$ in (\ref{eq:W}).
+\end{proof}
+
+As noted in Definition \ref{defn:W}, the Schouten and Weyl tensors only make sense when $\dim M \ge 3$, but we can still say something about $\Rm$ and $\Rc$ in dimension $2$:
+\begin{cor}
+    If $(M, g)$ is a Riemannian manifold of dimension $2$, the Riemann and Ricci tensors are determined by
+    \begin{equation}\label{eq:dim2}
+    \Rm = \frac{1}{4} S g \owedge g \quad \text{and} \quad \Rc = \frac{1}{2}Sg.\end{equation}
+\end{cor}
+\begin{proof}
+    $g\owedge g$ spans $\~R(V^*)$ by Corollary \ref{cor:R(V^*)dim0-3}, so we can find a scalar function $f$ with $\Rm = f \cdot g \owedge g$. Using Lemma \ref{KNproperties}(\ref{KN4}), one directly computes
+    \[\Rc = \tr_g(\Rm) = f\cdot\tr(g \owedge g) = 2f g,\]
+    which in turn gives
+    \[S = \tr_g(\Rc) = 2f \cdot \tr_g(g) = 4f.\]
+    Substituting $f = \frac{1}{4}S$ into the equations $\Rm = f \cdot g \owedge g$ and $\Rc = 2fg$, we get (\ref{eq:dim2}).
+\end{proof}
+
+\begin{thm}\label{thm:Rmdecomp}
+Let $(M, g)$ be a Riemannian manifold of dimension $n \ge 3$. Then the $(0,4)$-curvature tensor $\Rm$ decomposes orthogonally as follows:
+\begin{equation}
+\label{eq:RmDecomp}
+    \Rm = W + \frac{\tRc \owedge g}{n-2}+ \frac{S}{2n(n-1)}g \owedge g.
+\end{equation}
+In particular,
+\begin{equation}
+\label{eq:|Rm|^2decomp}
+    \left|\Rm \right|_g^2 = |W|_g^2 + \frac{4}{n-2}\big|\tRc\big|_g^2 + \frac{2}{n(n-1)}S^2.
+\end{equation}
+\end{thm}
+\begin{proof}
+    For the decomposition (\ref{eq:RmDecomp}), we substitute $\Rc = \tRc + \frac{S}{n}g$ in (\ref{eq:W}) to get
+    \begin{align*}
+        \Rm &= W + \frac{\tRc \owedge g}{n-2} + \frac{S}{n-2}\left(\frac{1}{n} - \frac{1}{2(n-1)}\right)g \owedge g \\ 
+        &=  W + \frac{\tRc \owedge g}{n-2} + \frac{S}{n-2}\left(\frac{n-2}{2n(n-1)}\right) g \owedge g \\
+        &=  W + \frac{\tRc \owedge g}{n-2}+ \frac{S}{2n(n-1)}g \owedge g.
+    \end{align*}
+    To show that this decomposition is orthogonal, we note that $\tr_g W = 0$ and $\tr_g \tRc = 0$, so using Lemma \ref{KNproperties}(\ref{KN5}), we get
+    \[\law W, h \owedge g \raw_g = 4\law 0, h \raw_g = 0\]
+    and
+    \[\big \langle \tRc \owedge g, g \owedge g \big \rangle_g = 4\big\langle \tr_g\big(\tRc \owedge g\big), g \big\rangle_g = 4\langle 0, g \rangle_g = 0.\]
+
+    For the decomposition (\ref{eq:|Rm|^2decomp}), we have
+    \begin{equation}
+    \label{eq:|Rm|^2}
+    |\Rm|_g^2 = |W|_g^2 + \left|\frac{1}{n-2} \tRc \owedge g\right|_g^2 + \left|\frac{S}{2n(n-1)}g \owedge g\right|_g^2.\end{equation}
+    We now simplify the terms on the right-hand side. Using Lemma \ref{KNproperties}(\ref{KN6}), we obtain
+    \begin{align*}
+        \left|\frac{1}{n-2} \tRc \owedge g\right|_g^2 &= \frac{1}{(n-2)^2}4(n - 2)\big|\tRc\big|_g^2 + 4(\tr_g \tRc)^2 \\ 
+        &= \frac{4}{n-2}\big|\tRc\big|_g^2
+    \end{align*}
+    and
+    \begin{align*}
+        \left|\frac{S}{2n(n-1)}g \owedge g\right|_g^2 &= \left(\frac{S}{2n(n-1)}\right)^2(4(n-2)|g|_g^2 + 4(\tr_g g)^2) \\ 
+        &= \left(\frac{S}{2n(n-1)}\right)^2(4n(n-2) + 4n^2) \\ 
+        &= \left(\frac{S}{2n(n-1)}\right)^2 \left(8n(n-1)\right) \\ 
+        &= \frac{2}{n(n-1)}S^2.
+    \end{align*}
+    Substituting these expressions into (\ref{eq:|Rm|^2}) gives the result.
+\end{proof}
+\section{Curvature of conformally related metrics}
+
+\subsection{Change of curvature under a conformal transformation} 
+Two Riemannian metrics $g$ and $\tilde{g}$ on the same manifold $M$ are called \emph{conformal} to one another if $g = f \tilde{g}$ for some positive function $f$. Well-known examples include the round and hyperbolic metrics on Euclidean space, both of which are locally conformal to the usual Euclidean metric. If $g$ and $\tilde{g}$ are conformally related, we can always write $\tilde{g} = e^{2f}g$, a convention we will adopt throughout these notes. Given a pair of conformally related metrics $g$ and $\tilde{g}$ on $M$, there is \emph{a priori} no relation between the different curvature tensors of $g$ and $\tilde{g}$. In this section we investigate what happens to the curvature tensors $\Rm, \Rc, S, P$, and $W$ when a metric is changed conformally. Our first goal is to explain how the Weyl tensor behaves under a conformal change of metrics. We will need the following lemma:
+
+\begin{lem}
+    If $(M,g)$ is an $n$-dimensional Riemannian manifold and $\tilde{g} = e^{2f}g$ is any metric conformal to $g$, then
+    \begin{equation}\label{eq:tilde{nabla}}\widetilde{\nabla}_X Y = \nabla_X Y + (Xf)Y + (Yf)X - \law X,Y \raw_g \grad{f},\end{equation}
+    where $\widetilde{\nabla}$ denotes the Levi-Civita connection of $\tilde{g}$. The Christoffel symbols of $\widetilde{\nabla}$ and $\nabla$ are related by
+    \begin{equation}\label{eq:conformalChristoffel}
+        \widetilde{\Gamma}_{ij}^k = \Gamma_{ij}^k + f_{;i}\delta_j^k + f_{;j}\delta^k_i - g^{k\ell}f_{;\ell}g_{ij}
+    \end{equation} 
+    where $f_{;i} = \del_i f$ denotes the $i^{th}$ component of $\nabla f = df = f_{;i}dx^i$.
+\end{lem}
+\begin{proof}
+    Recall that in a smooth coordinate chart for $M$, the Christoffel symbols are given by
+    \[\Gamma_{ij}^k = \frac{1}{2}g^{k \ell}\left(\del_ig_{j\ell} + \del_j g_{i\ell} - \del_\ell g_{ij}\right).\]
+    For $\tilde{g}$, we have $\tilde{g}_{k\ell} = e^{2f} g_{k\ell}$, so $\tilde{g}^{k\ell} = e^{-2f} g^{k\ell}$, and the formula above gives
+    \begin{align*}
+        \widetilde{\Gamma}_{ij}^k &= \frac{1}{2}\tilde{g}^{k\ell}(\del_i \tilde{g}_{j\ell} + \del_j \tilde{g}_{i\ell} - \del_\ell \tilde{g}_{ij})\\
+        &= \frac{1}{2}e^{-2f}g^{k\ell} \left(\del_i (e^{2f}g_{j\ell}) + \del_j (e^{2f} g_{i\ell}) - \del_\ell (e^{2f}g_{ij})\right).
+    \end{align*}
+    Computing $\del_i e^{2f}$, we get 
+    \begin{align*}
+        \del_i (e^{2f}g_{j\ell}) &= (\del_i e^{2f})g_{j\ell} + e^{2f} \del_i g_{j\ell}\\
+        &= (2e^{2f} \del_i f)g_{j\ell} + e^{2f}\del_i g_{j \ell}\\
+        &=2e^{2f}f_{;i}g_{j\ell} + e^{2f}\del_i g_{j \ell}.
+    \end{align*}
+    The other two terms $\del_j (e^{2f} g_{i\ell})$ and $\del_\ell (e^{2f}g_{ij})$ can now be calculated by substituting the appropriate indices into the expression for $\del_i (e^{2f}g_{j\ell})$ above. Putting everything together, we get
+    \begin{align*}
+        \widetilde{\Gamma}_{ij}^k
+        &= \frac{1}{2}e^{-2f}g^{k\ell} \left(\del_i (e^{2f}g_{j\ell}) + \del_j (e^{2f} g_{i\ell}) - \del_\ell (e^{2f}g_{ij})\right)\\
+        &= \frac{1}{2} e^{-2f}g^{k\ell}\left(e^{2f}(\del_ig_{j\ell} + \del_j g_{i\ell} - \del_\ell g_{ij})\right) + \frac{1}{2}e^{-2f}g^{k\ell}(2e^{2f}(f_{;i} g_{j\ell} + f_{;j} g_{i\ell} - f_{;\ell} g_{ij}))\\
+        &= \frac{1}{2}g^{k \ell}\left(\del_ig_{j\ell} + \del_j g_{i\ell} - \del_\ell g_{ij}\right) + g^{k\ell}(f_{;i} g_{j\ell} + f_{;j} g_{i\ell} - f_{;\ell} g_{ij})\\
+        &= \Gamma_{ij}^k + f_{;i}\delta_j^k + f_{;j} \delta_i^k - g^{k\ell}f_{;\ell}g_{ij},
+    \end{align*}
+    which gives (\ref{eq:conformalChristoffel}). For (\ref{eq:tilde{nabla}}), recall that the Levi-Civita connection acts on vector fields $X = X^i \del_i$ and $Y = Y^j \del_j$ by
+    \[\nabla_X Y = X^i(\del_i Y^k + \Gamma^k_{ij} Y^j)\del_k = X^i(\nabla_i Y^k)\del_k,\]
+    and similarly for $\widetilde{\nabla}$:
+    \[\widetilde{\nabla}_X Y = X^i(\del_i Y^k + \widetilde{\Gamma}_ij^k Y^j)\del_k.\]
+    Substituting (\ref{eq:conformalChristoffel}) into the equation above, we get
+    \begin{align*}
+        \tilde{\nabla}_X Y &= X^i \left[\del_i Y^k + \left(\Gamma_{ij}^k + f_{;i}\delta_j^k + f_{;j} \delta_i^k - g^{k\ell}f_{;\ell}g_{ij}\right)Y^j \right]\del_k \\ 
+        &= X^i \left[(\del_i Y^k + \Gamma^k_{ij} Y^j) + f_{;i}\delta_j^kY^j  + f_{;j} \delta_i^kY^j  - g^{k\ell}f_{;\ell}g_{ij}Y^j \right]\del_k \\
+        &= X^i (\nabla_i Y^k)\del_k + (X^i f_{;i})Y^k\del_k + X^k f_{;j} Y^j \del_k - (X^ig_{ij}Y^j)(g^{k\ell}f_{;\ell})\del_k \\ 
+        &= \nabla_X Y + (Xf)Y + (Yf)X - \law X,Y \raw_g \grad{f},
+    \end{align*}
+    as claimed.
+\end{proof}
+
+\begin{thm}\label{thm:conformalcurvature}
+    Let $(M,g)$ be a Riemannian manifold of dimension $n$ (with or without boundary), let $f \in C^\infty(M)$ and set $\tilde{g} = e^{2f}g$. Then we have
+    \begin{align}
+        \widetilde{\Rm} &= e^{2f}\left(\Rm - (\nabla^2 f) \owedge g + (df \otimes df) \owedge g - \frac{1}{2} |df|_g^2(g \owedge g) \right) \label{eq:tildeRm}\\
+        \widetilde{\Rc} &= \Rc - (n-2)\nabla^2f + (n-2)(df \otimes df) - (\Delta f + (n-2)|df|_g^2)g\\
+        \widetilde{S} &=  e^{-2f}(S - 2(n-1)\Delta f -(n-1)(n-2)|df|_g^2)\label{eq:tildeS},{}
+    \end{align}
+    where $\Delta f = \div(\grad{f})$ is the Laplacian. If $n \ge 3$, then the Schouten and Weyl tensors of $\tilde{g}$ decompose as follows:
+    \begin{align}
+        \widetilde{P} &= P - \nabla^2f + (df \otimes df) - \frac{1}{2}|df|_g^2 g \label{eq:tildeP}\\
+        \widetilde{W} &= e^{2f}W.\label{eq:tildeW}
+    \end{align}
+\end{thm}
+
+\begin{proof}
+    We first prove (\ref{eq:tildeRm}), and then derive the remaining relations. In local coordinates at a point $p \in M$, we have $g_{ij} = \delta_{ij}$, $\del_k g_{ij} = 0$ and $\Gamma_{ij}^k = 0$, and the following equations hold at $p$:
+    \begin{align*}
+        f_{;ij} &= \del_j \del_i f \\ 
+        \widetilde{\Gamma}_{ij}^k &= f_{;i} \delta_j^k + f_{;j}\delta_i^k - g^{k\ell}f_{;\ell}g_{ij}\\
+        \del_m\widetilde{\Gamma}_{ij}^k &= \del_m \Gamma_{ij}^k + f_{;im} \delta_j^k + f_{;jm}\delta_i^k - g^{k\ell}f_{;\ell m}g_{ij}\\
+        {R_{ijk}}^\ell &= \del_i \Gamma_{jk}^\ell - \del_j \Gamma_{ik}^\ell\\
+        (\nabla^2 f)_{ij} &= \del_i \del_j f = f_{;ij}
+    \end{align*}
+    We have
+    \[\widetilde{R}_{ijk\ell} =  e^{2f} g_{\ell m} \left(\del_i \widetilde{\Gamma}_{jk}^m - \del_j \widetilde{\Gamma}_{ik}^m + \widetilde{\Gamma}_{jk}^p\widetilde{\Gamma}_{ip}^m - \widetilde{\Gamma}_{ik}^p\widetilde{\Gamma}_{jp}^m \right). \]
+    Using the relations above and performing a number of simplifications, we get the formula
+    \begin{align*}
+        \widetilde{R}_{ijkl} = e^{2f} \big( R_{ijk\ell} &- (f_{;ik} g_{j\ell} + f_{;j\ell} g_{ik} - f_{;jk} g_{i\ell} - f_{;i\ell} g_{jk}) \\
+        &+ (f_{;i} f_{;\ell} g_{jk} + f_{;j} f_{;k} g_{i\ell} - f_{;i} f_{;k} g_{j\ell} - f_{;j} f_{;\ell} g_{ik}) \\
+        &- g^{mp} f_{;m} f_{;p} (g_{i\ell} g_{jk} - g_{ik} g_{j\ell}) \big)
+    \end{align*}
+    Since $(\nabla^2 f)_{ij} = f_{;ij}$, the term $f_{;ik} g_{j\ell} + f_{;j\ell} g_{ik} - f_{;jk} g_{i\ell} - f_{;i\ell} g_{jk}$ is just the coordinate version of $(\nabla^2 f) \owedge g$, and $f_{;i} f_{;\ell} g_{jk} + f_{;j} f_{;k} g_{i\ell} - f_{;i} f_{;k} g_{j\ell} - f_{;j} f_{;\ell} g_{ik}$ is just the coordinate version of $(df \otimes df) \owedge g$. Finally, $|df|_g^2 = g^{mp}f_{;m} f_{;p}$, and $g \owedge g$ has components $2(g_{i\ell}g_{jk} - g_{ik}g_{j\ell})$, so the expression simplifies to (\ref{eq:tildeRm}).
+
+We may now derive the remaining formulas. For the Ricci tensor, we can use the fact that $g^{j\ell}R_{ji\ell k} = R_{ik} = \Rc_{ik}$. $\widetilde{\Rc}_{ik}$ can therefore be calculated by contracting the formula for $\widetilde{R}_{ji\ell k}$ with $\tilde{g}^{j \ell}$. The contraction of $(\nabla^2 f) \owedge g$ is $(n-2)\nabla^2 f - (\Delta f)g$, and $\widetilde{S} = \tilde{g}^{ik}\widetilde{\Rc}_{ik}$, so by contracting the formula for $\widetilde{\Rc}$ with $\tilde{g}^{ik} = e^{-2f}g^{ik}$, we get (\ref{eq:tildeS}). For (\ref{eq:tildeP}), we begin by using the definition of the Schouten tensor to write
+\[\widetilde{P} = \frac{1}{n-2} \left( \widetilde{\Rc} - \frac{\widetilde{S}}{2(n-1)} \tilde{g} \right).\]
+Substituting in the formula for $\widetilde{\Rc}$ derived above, we get 
+\[
+\widetilde{P} = \frac{1}{n-2} \left[\Rc - (n-2)\nabla^2f + (n-2)(df \otimes df) - (\Delta f + (n-2)|df|_g^2)g - \frac{\widetilde{S}}{2(n-1)} \tilde{g} \right].
+\]
+Next, we calculate 
+\begin{align*}
+    \frac{\widetilde{S}}{2(n-1)} \tilde{g} &= \frac{1}{2(n-1)} \left[ e^{-2f} \left( S - 2(n-1)\Delta f -(n-1)(n-2)|df|_g^2 \right) \right] (e^{2f}g)\\
+    &= \frac{1}{2(n-1)} \left[ S - 2(n-1)\Delta f -(n-1)(n-2)|df|_g^2 \right] g \\ 
+    &= \left[ \frac{S}{2(n-1)} - \Delta f - \frac{n-2}{2}|df|_g^2 \right] g
+\end{align*}
+So we find that 
+\begin{align*}
+\widetilde{P} = \frac{1}{n-2} \bigg[\Rc - (n-2)\nabla^2f &+ (n-2)(df \otimes df) - (\Delta f + (n-2)|df|_g^2)g\\
+ &- \left(\frac{S}{2(n-1)} - \Delta f - \frac{n-2}{2}|df|_g^2 \right) g\bigg].
+\end{align*}
+Now, we group together the terms containing a factor of $g$ and simplify:
+\begin{align*}
+\left(- \Delta f - (n-2)|df|_g^2 - \frac{S}{2(n-1)} + \Delta f + \frac{n-2}{2}|df|_g^2 \right)g &= \left(- (n-2)|df|_g^2 - \frac{S}{2(n-1)} + \frac{n-2}{2}|df|_g^2 \right)g\\
+&= \left(-\frac{S}{2(n-1)} - \frac{n-2}{2}|df|_g^2 \right) g.
+\end{align*} 
+This gives the following expression for $\widetilde{P}$:
+\begin{align*}
+\widetilde{P} &= \frac{1}{n-2} \Rc - (n-2)\nabla^2f + (n-2)(df \otimes df) + \left(-\frac{S}{2(n-1)} - \frac{n-2}{2}|df|_g^2 \right) g\\
+&= \frac{1}{n-2} \left( \Rc - \frac{S}{2(n-1)} g \right) - \frac{n-2}{n-2} \nabla^2f + \frac{n-2}{n-2} (df \otimes df) - \frac{1}{n-2} \frac{n-2}{2} |df|_g^2 g\\ 
+&= \frac{1}{n-2} \left( \Rc - \frac{S}{2(n-1)} g \right) - \nabla^2 f + (df \otimes df) - \frac{1}{2}|df|_g^2 g \\
+&= P - \nabla^2 f + (df \otimes df) - \frac{1}{2}|df|_g^2 g,
+\end{align*}
+which is (\ref{eq:tildeP}).
+
+Finally, for (\ref{eq:tildeW}), write
+\[Q = \nabla^2f - (df \otimes df) + \frac{1}{2}|df|_g^2 g.\]
+Then $Q = P - \widetilde{P}$, and 
+\begin{align*}
+\widetilde{\Rm} &= e^{2f}(\Rm - Q \owedge g)\\
+    &= e^{2f}\left(\Rm - P \owedge g + \widetilde{P} \owedge g \right).
+\end{align*}
+Now, we have $W = \Rm - P \owedge g$, and substituting this into the equation above gives
+\[\widetilde{\Rm} = e^{2f}\left(W + \widetilde{P} \owedge g\right).\]
+But on the other hand, we also have $\widetilde{\Rm} = \widetilde{P} \owedge \tilde{g}$, and one directly computes
+\[\widetilde{P} \owedge \tilde{g} = \widetilde{P} \owedge (e^{2f}g) = e^{2f}(\widetilde{P} \owedge g),\]
+so we deduce that
+\[e^{2f}W + e^{2f} (\widetilde{P} \owedge g) = \widetilde{W} + e^{2f} (\widetilde{P} \owedge g).\]
+Subtracting $e^{2f} (\widetilde{P} \owedge g)$ from both sides yields (\ref{eq:tildeW}).
+
+\end{proof}
+
+\subsection{The Weyl-Schouten theorem}A Riemannian manifold $(M, g)$ is called \emph{locally conformally flat} if for every $p \in M$ there is an open neighbourhood of $p$ which is conformally equivalent to an open subset of Euclidean space, and $M$ is called \emph{flat} if its Riemann curvature tensor vanishes identically.\footnote{This is equivalent to the condition that $(M,g)$ is locally isometric to a Euclidean space; see Theorem 7.10 in \cite{LeeRiemannian}.}
+We now put our hard work in the previous section to good use by using the Weyl tensor to describe geometric properties of Riemannian manifolds. The goal of this section is to prove the Weyl-Schouten theorem, which provides a complete characterization of conformal flatness in dimensions $\ge 3$. 
+
+\begin{prop}\label{prop:conformalW=0}
+Let $(M,g)$ denote a Riemannian manifold of dimension $n \ge 3$. If $(M,g)$ is locally conformally flat, then the Weyl tensor of $g$ vanishes.
+\end{prop}
+\begin{proof}
+    If $(M,g)$ is locally conformally flat, then for each $p \in M$ we can find an open neighbourhood $U$ of $p$ and an embedding $\vp: U \mono \R^n$ with the property that $\vp$ pulls $g$ back to some flat metric of the form $\tilde{g} = e^{2f}g$. As $\tilde{g}$ is flat, its Riemann curvature tensor vanishes, so its Weyl tensor $\widetilde{W}$ must vanish. By (\ref{eq:tildeW}), we have 
+    \[0=\tilde{W} = e^{2f}W,\]
+    which gives $W =0$.
+\end{proof}
+It is worth paying close attention to the case $n = 3$. As we will soon see, in dimensions greater than $4$, the ``if'' in the above proposition can be promoted to an ``if and only if'', but in dimension $3$ this proposition doesn't give us any new information, since we already know from Corollary \ref{cor:W=0} that $W$ will vanish on any $3$-dimensional Riemannian manifold. To study the case $n=3$ more closely, we will need to define another tensor field:
+\begin{defn}
+    On a Riemannian manifold $(M,g)$, the \emph{Cotton tensor} $C$ is the $3$-tensor field 
+    \begin{equation}\label{eq:C}C = -DP\end{equation}
+    where $D$ denotes the exterior covariant derivative. In coordinates with respect to a local frame, we can write
+    \begin{equation}\label{eq:Cijk}C_{ijk} = P_{ij;k} - P_{ik;j}.\end{equation}
+\end{defn} 
+The next proposition illustrates two properties of the cotton tensor that are often useful during computations. We will omit the proof of this proposition, which boils down to a series of calculations. 
+\begin{prop}\label{prop:CProperties}
+Suppose $(M, g)$ is a Riemannian manifold of dimension $n \ge 3$, and let $W$ and $C$ denote its Weyl and Cotton tensors respectively. 
+\begin{enumerate}
+    \item \label{prop:CProperties1} $W$ and $C$ are related by the formula 
+\begin{equation}    
+    \tr_g(\nabla W) = (n-3)C,
+\end{equation}
+where $\tr_g$ is the trace on the first and last indices.
+\item \label{prop:CProperties2} If $\tilde{g} = e^{2f}g$ for some $f \in C^\infty(M)$ and $\tilde{C}$ denotes the Cotton tensor of $\widetilde{g}$, then $\widetilde{C} = C$.
+\end{enumerate}
+\end{prop}
+\begin{proof}
+ See \cite{LeeRiemannian}, Propositions 7.32. and 7.34.
+\end{proof}
+This Proposition has the following immediate consequence:
+\begin{cor}
+    If $(M, g)$ is a Riemannian manifold of dimension $\ge 4$ and the Weyl tensor vanishes, then so does the Cotton tensor.
+\end{cor}
+
+Our next result illustrates that the Cotton tensor is a reasonable measure of conformal flatness in dimension $3$:
+\begin{prop}\label{prop:conformalC=0}
+    If $(M, g)$ is a locally conformally flat $3$-manifold, then its Cotton tensor vanishes identically.
+\end{prop}
+\begin{proof}
+    Suppose $(M, g)$ is locally conformally flat of dimension $3$. Then each $p \in U$ has a neighbourhood $U$ where $g$ is conformally equivalent to some flat metric $\tilde{g}$, so that $g = e^{2f}\tilde{g}$ for some function $f$ on $U$. Since $\tilde{g}$ is a flat metric, its Riemann curvature tensor $\widetilde{\Rm}$ vanishes, therefore $\widetilde{C} = 0$. Using \ref{prop:CProperties}(\ref{prop:CProperties2}), we deduce that $C = 0$ as well.
+\end{proof}
+
+The final lemma we will need is a technical result that will play an important role in the proof of the Weyl-Schouten theorem. Recall that a system of partial differential equations is called \emph{overdetermined} if there are more equations than unknown functions.
+
+\begin{lem}\label{lem:overdeterminedSolution}
+    Let $(M, g)$ be a Riemannian manifold, and consider the overdetermined system of equations
+    \begin{equation} \label{eq:A(xi)}
+        \nabla \xi = A(\xi)
+    \end{equation}
+    where $A: T^*M \to T^2 T^*M$ is a smooth map which satisfies the following property: for each smooth covector field $\xi$, the $3$ tensor field satisfies the following equation when $A(\xi)$ is substituted for $\nabla \xi$:
+    \begin{equation}\label{eq:A(xi)relation}
+        A(\xi)_{ij;k} - A(\xi)_{ik;j} = {R_{jki}}^\ell \xi_\ell.
+    \end{equation}
+    Then for all $p \in M$ and all covectors $\eta_0 \in T_p^* M$, there is a smooth solution to (\ref{eq:A(xi)}) on a neighbourhood of $p$ such that $\xi_p = \eta_0$.
+\end{lem}
+
+\begin{proof}
+ Take any $p\in M$, and write $(x^i)$ for a smooth local coordinate system in some neighbourhood of $p$. In these coordinates, the overdetermined system (\ref{eq:A(xi)}) can be written as
+ \[\frac{\del \xi_i(x)}{\del x^j} = a_{ij}(x, \xi(x)),\]
+ where 
+ \[a_ij(x, \xi) = \Gamma_{ij}^k(x) \xi_k + A(\xi)_{ij}.\]
+ The Fr\"obenius theorem (\cite{LeeSM}, Theorem 19.12) shows that we can find a smooth solution to this system in a neighbourhood of $p$ for all $\xi_p$ provided the following holds:
+ \begin{equation}\label{eq:aijPartials}
+ \frac{\del a_{ij}}{\del x^k} + a_{k\ell} \frac{\del a_{ij}}{\del \xi_\ell} = \frac{\del a_{ik}}{\del x^j} + a_{j \ell} \frac{\del a_{ik}}{\del \xi_\ell}.
+ \end{equation}
+ Using the chain rule, this means that the first derivatives $\del(a_{ij}(x, \xi(x)))/\del x^k$ are symmetric in $j,k$ once we substitute $a_{k\ell}(x, \xi(x))$ for $\del \xi_k(x)/\del x^\ell$. Since $\xi_{k;\ell} = \del_\ell \xi_k - \Gamma_{k\ell}^m \xi_m$, this is the same as substituting $A(\xi)_{k\ell}$ for $\xi_{k;\ell}$. Expanding (\ref{eq:A(xi)relation}) in terms of Christoffel symbols and simplifying, we get (\ref{eq:aijPartials}).
+\end{proof}
+
+We are now ready to prove the main theorem of the section:
+
+\begin{thm}[Weyl-Schouten]
+    Suppose $(M,g)$ is a Riemannian manifold of dimension $n \ge 3$.
+    \begin{enumerate}
+        \item If $n \ge 4$, then $(M, g)$ is locally conformally flat if and only if its Weyl tensor vanishes.
+        \item If $n = 3$, then $(M,g)$ is locally conformally flat if and only if its Cotton tensor vanishes.
+    \end{enumerate}
+\end{thm}
+\begin{proof}
+    The forward directions of (1) and (2) were proved in Propositions \ref{prop:conformalW=0} and \ref{prop:conformalC=0} respectively. To prove the converse first notice that if $\tilde{g} = e^{2f}g$ is a metric conformal to $g$, then the Weyl tensor $\widetilde{W}$ of $\tilde{g}$ vanishes, so $\widetilde{\Rm} = \widetilde{P} \owedge \tilde{g}$. Take any $p \in M$ and let $U$ be an open neighbourhood of $p$. We'll show that in this neighbourhood, we can choose $f$ so that $\widetilde{P} = 0$, which will imply that $\tilde{g}$ is flat (since then $\widetilde{\Rm} = 0$). Using (\ref{eq:tildeP}), we know that $\widetilde{P} = 0$ if and only if
+    \begin{equation}\label{eq:tildeP=0}
+        P - \nabla^2 f + (df \otimes df) - \frac{1}{2}\law df, df \raw_g^2 g = 0.
+    \end{equation}
+    Write $A$ for the map that takes a $1$-tensor $\xi$ and outputs a symmetric $2$-tensor $A(\xi)$ defined by
+    \[A(\xi) = (\xi \otimes \xi) - \frac{1}{2}\law \xi, \xi \raw_g^2 g + P, \]
+    in other words,
+    \begin{equation}\label{eq:A(xi)ij}
+        A(\xi)_{ij} = \xi_i \xi_j - \frac{1}{2} \xi_m \xi^m g_{ij} + P_{ij}.
+    \end{equation}
+    With this notation, the equation (\ref{eq:tildeP=0}) becomes
+    \[\nabla(df) = A(df).\]
+    Our task now is to find a solution for this equation, i.e., a smooth $1$-form $\xi$ with $\nabla \xi = A(\xi)$. Writing $\xi = \xi_j dx^j$ in some local coordinate system, the equation $\nabla(df) = A(df)$ is a system of first-order partial differential equations in the $n$ unknown functions $\xi_1, \ldots, \xi_n$. Suppose $\xi$ is such that $\nabla \xi = A(\xi)$ on $U$. The Ricci identity (\cite{LeeRiemannian}, Theorem 7.14) gives
+    \begin{equation}
+        A(\xi)_{ij;k} - A(\xi)_{ik;j} = \xi_{i;jk} - \xi_{i;kj} = {R_{jki}}^\ell \xi_{\ell}.
+    \end{equation}
+    Lemma \ref{lem:overdeterminedSolution} above tells us that $\nabla \xi = A(\xi)$ has a smooth solution in $U$ provided that on every smooth covector field $\xi$, we have $A(\xi)_{ij;k} - A(\xi)_{ik;j} = {R_{jki}}^\ell \xi_\ell$. To see that this condition is satisfied here, we differentiate (\ref{eq:A(xi)ij}), which gives
+    \[A_{ij;k} - A_{ik;j} = \xi_{i;k}\xi_j + \xi_j \xi_{j;k} - \xi_{m;k}\xi^m g_{ij} - \xi_{i;j}\xi_k - \xi_i \xi_{k;j} + \xi_{m;j}\xi^m g_{ik} + C_{ijk}.\]
+    Substituting (\ref{eq:A(xi)ij}) for $\xi_{i;j}$ and simplifying using $\Rm = W + P \owedge g$, we get
+    \[A(\xi)_{ij;k} - A(\xi)_{ik;j} - {R_{jki}}^\ell \xi_\ell = - W_{jki}^\ell \xi_\ell + C_{ijk}.\] 
+    The right-hand side is zero by hypothesis, so there is a solution $\xi$ to $\nabla \xi = A(\xi)$ in $U$. Now $A(\xi)_{ij}$ is symmetric in $i$ and $j$, so the derivatives $\del_j\xi_i = \xi_{i;j} + \Gamma_{ij}^k \xi_k$ are symmetric as well, which means that $\xi$ is a closed $1$-form. Shrinking $U$ if necessary, the Poincar\'e lemma tells us that there is some smooth function $f$ with $\xi = df = \nabla f$, which is the function we are looking for.
+\end{proof}
+\printbibliography 
+
+\end{document}
