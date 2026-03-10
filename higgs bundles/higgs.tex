@@ -1,0 +1,705 @@
+\documentclass[10pt]{amsart}
+\usepackage[OT1]{fontenc}
+\usepackage[margin = 1in]{geometry}
+
+%packages
+\usepackage{amsfonts,amsmath,amssymb,amsthm}
+\usepackage{enumerate}
+\usepackage[mathscr]{euscript}
+\usepackage{tikz-cd}
+\usepackage{quiver}
+\usepackage{wasysym}
+\usepackage{stmaryrd}
+\usepackage{subcaption}
+
+
+%bibliography & hyperlinks
+\usepackage[backend=biber, useprefix=true, style = alphabetic]{biblatex}
+\addbibresource{refs.bib}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks = true,
+    linktoc=page,
+    urlcolor = BurntOrange,
+    citecolor = Bittersweet,
+    linkcolor = BurntOrange,
+}
+%\renewcommand{\emph}[1]{\textcolor{Regalia}{\textup{#1}}}
+
+
+\setcounter{tocdepth}{2}
+
+\numberwithin{equation}{section}
+
+%define anything useful
+\def\~#1{\mathscr{#1}}
+\def\cal#1{\mathcal{#1}}
+\def\To#1{\xrightarrow{#1}}
+
+%commands{}
+\newcommand{\vp}{\varphi}
+\newcommand{\ve}{\varepsilon}
+\newcommand{\del}{\partial}
+\renewcommand{\H}{\mathbb{H}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\M}{\mathrm{M}}
+\newcommand{\isom}{\xrightarrow{\sim}}
+\newcommand{\epi}{\twoheadrightarrow}
+\newcommand{\mono}{\hookrightarrow}
+\newcommand{\im}{\mathop{\mathrm{im}}}
+\newcommand{\coker}{\mathop{\mathrm{coker}}}
+\newcommand{\Char}{\mathrm{char}}
+\newcommand{\lcm}{\mathrm{lcm}}
+\newcommand{\ord}{\mathrm{ord}}
+\newcommand{\Gcd}{\mathrm{gcd}}
+\newcommand{\Aut}{\mathrm{Aut}}
+\newcommand{\GL}{\mathrm{GL}}
+\newcommand{\Gr}{\mathrm{Gr}}
+\newcommand{\YMH}{\mathrm{YMH}}
+\newcommand{\id}{\mathrm{id}}
+\newcommand{\ev}{\mathrm{ev}}
+\newcommand{\pr}{\mathrm{pr}}
+\newcommand{\ob}{\mathrm{ob}}
+\newcommand{\rk}{\mathrm{rk}}
+\renewcommand{\div}{\mathrm{div}}
+\newcommand{\Hom}{\mathrm{Hom}}
+\newcommand{\Div}{\mathrm{Div}}
+\newcommand{\PDiv}{\mathrm{PDiv}}
+\DeclareMathOperator{\End}{End}
+\DeclareMathOperator{\tr}{tr}
+\newcommand{\Pic}{\mathrm{Pic}}
+\renewcommand{\frak}[1]{\mathfrak{#1}}
+
+%theorem environments
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem*{thm*}{Theorem}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem*{lem*}{Lemma}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem*{cor*}{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem*{defn*}{Definition}
+\newtheorem{ex}[thm]{Example}
+\AtEndEnvironment{ex}{\null\hfill$\Diamond$}
+\newtheorem{exs}[thm]{Examples}
+\AtEndEnvironment{exs}{\null\hfill$\Diamond$}
+
+\theoremstyle{remark}
+\newtheorem*{rmk}{Remark}
+\newtheorem*{warn}{Warning}
+\newtheorem*{rmks}{Remarks}
+\newtheorem*{notation}{Notation}
+
+\setcounter{section}{-1}
+
+\begin{document}
+
+\title{Moduli of Higgs bundles on compact Riemann surfaces}
+\begin{abstract}
+We give an introduction to the theory of Higgs bundles and their moduli on a compact Riemann surface. After a review of holomorphic vector bundles and stability conditions, we describe the moduli space of semistable Higgs bundles and their relationship to Hitchin's equations, culminating in a discussion of the Hitchin-Kobayashi correspondence for compact Riemann surfaces.
+\end{abstract}
+
+\author{Elias Vandenberg}
+\address{Department of Mathematics, Western University}
+\email{evande95@uwo.ca}
+\date{\today}
+
+\maketitle
+
+\tableofcontents
+
+\section{Introduction} 
+
+The study of vector bundles and their moduli has been one of the most active research areas in geometry over the past 50 years. This is an exciting field with connections to subjects like complex algebraic geometry, gauge theory, complex analysis, and mathematical physics, and can be approached from a number of different perspectives. Hitchin was among the first to recognize the potential applications that vector bundles and their moduli had in mathematical physics, and the goal of these notes is to give an introduction to his seminal paper \cite{hitchin1987A} on the self-duality equations for Riemann surfaces. In this paper, Hitchin introduces the notion of a \emph{Higgs bundle} on a Riemann surface $X$, which is a holomorphic vector bundle $E$ equipped with a holomorphic section $\Phi: E \to E \otimes K_X$ called the \emph{Higgs field}. Higgs bundles were motivated by Hitchin's study of the Yang-Mills self-duality equations over a Riemann surface, where he focused on reducing the self-duality equations from 4 dimensions to 2 dimensions. In this reduced form, the self-duality equations are known as \emph{Hitchin's} equations. For a pair $(A, \Phi)$ consisting of a connection $A$ and Higgs field $\Phi$ on a complex vector bundle $E \to X$, Hitchin's equations are
+\[\begin{cases}
+F_A + [\Phi, \Phi^*] = 0, \\ 
+\bar{\partial}_A \Phi = 0.
+\end{cases}
+\]
+Where $F_A$ is the curvature form of $A$, $\bar{\partial}_A$ is the $(0,1)$-part of the induced connection, and $[\Phi, \Phi^*]$ denotes the commutator. Our main goal is to state the \emph{Hitchin-Kobayashi correspondence} for Riemann surfaces, which can roughly be stated as follows:
+
+\begin{thm*}[Hitchin-Kobayashi correspondence]
+    There is a one-to-one correspondence between Higgs bundles $(E, \Phi)$ and solutions $(A, \Phi)$ to Hitchin's equations.
+\end{thm*} 
+
+Since Hitchin's original paper \cite{hitchin1987A}, the theory of Higgs bundles has 
+been developed significantly, most notably in the work of Corlette \cite{corlette1988} and Simpson \cite{simpson92}. The Hitchin-Kobayashi correspondence can now be regarded as the most basic example of the \emph{non-abelian Hodge correspondence}, which relates Higgs bundles to representations of the fundamental group of a smooth projective algebraic variety over $\C$. Higgs bundles and related concepts also appear in more modern areas of research like homological mirror symmetry, Hodge theory, and (perhaps most surprisingly) the Langlands program. 
+
+In these notes, we first provide a recap of holomorphic vector bundles on complex manifolds. We then specialize to the case of holomorphic bundles on a compact Riemann surface, which allows us to define a moduli space of vector bundles using stability conditions. We then define Higgs bundles with examples, and state some of their basic properties, including the existence of the Harder-Narasimhan and Seshadri filtrations. We conclude by describing the moduli space of Higgs bundles (including a discussion of the Hitchin fibration) and formally stating the Simpson-Kobayashi correspondence for Higgs bundles on a compact Riemann surface.
+
+\section{Holomorphic vector bundles} 
+
+\subsection{Basic definitions and examples} We begin by reviewing the basics of holomorphic vector bundles. Before considering vector bundles on Riemann surfaces, we first define them in the more general setting of complex manifolds. 
+\begin{defn}\label{defn:1.1}
+    A \emph{complex vector bundle of rank $n$} over a complex manifold $X$ is a complex manifold $E$ together with a continuous surjection $\pi: E \epi X$ (called the \emph{projection}), such that the following conditions are satisfied:
+    \begin{enumerate}[(i)]
+        \item for each $x \in X$, the fibre $E_x = \pi^{-1}(x)$ has the structure of an $n$-dimensional complex vector space, 
+        \item each point $x \in X$ has an open neighbourhood $U$ and a homeomorphism $\vp_U$ which is \emph{fibre-preserving}, meaning that the following triangle commutes:
+        \begin{equation}\label{eq:1.1}
+            \begin{tikzcd}[sep=scriptsize]
+                {\pi^{-1}(U)} && {U \times \C^n} \\
+                & U
+                \arrow["{\vp_U}", from=1-1, to=1-3]
+                \arrow["\pi"', from=1-1, to=2-2]
+                \arrow["{\pr_U}", from=1-3, to=2-2]
+            \end{tikzcd}
+        \end{equation}
+        (where $\pr_U$ is the projection onto $U$), and such that the restriction $\vp_U |_{_{E_x}}: E_x \to \{x\} \times \C^n \cong \C^n$ is a vector space isomorphism.
+    \end{enumerate}
+    The map $\vp_U : \pi^{-1}(U) \to U \times \C^n$ is called a \emph{local trivialization} of $E$ over $U$. If $\{U_i\}_{i \in I}$ is an open cover of $X$ and we have local trivializations $\vp_i: \pi^{-1}(U_i) \to U_i \times \C^n$, the pair $(U_i, \vp_i)$ is called a \emph{chart}, and the collection $\{(U_i, \vp_i)\}_{i \in I}$ is called an \emph{atlas} for $E$.  A vector bundle of rank $1$ is called a \emph{line bundle}. We often abuse notation and write ``the vector bundle $E$'' in place of ``the vector bundle $\pi: E \epi X$''
+\end{defn}
+
+Similarly to manifolds, we define a notion of \emph{compatibility} for atlases for on vector bundle:
+
+\begin{defn}\label{defn:1.2}
+    Let $\pi: E \epi X$ be a complex vector bundle of rank $n$. An atlas $\mathfrak{U} = \{(U_i, \vp_i)\}_{i \in I}$ is called \emph{holomorphic} if each map $\vp_i: \pi^{-1}(U_i) \to U_i \times \C^n$ is biholomorphic. Two atlases $\mathfrak{U} = \{(U_i, \vp_i)\}_{i \in I}$ and $\mathfrak{V} = \{(V_j, \psi_j)\}_{j \in J}$ are called \emph{compatible} if the maps
+    \[\vp_i \circ \psi_j^{-1}: (U_i \cap V_j) \times \C^n \to (U_i \cap V_j) \times \C^n\]
+    are biholomorphic for all $i \in I$ and $j \in J$.
+\end{defn}
+
+It is clear that compatibility of atlases is an equivalence relation. Moreover, if $\mathfrak{U}$ and $\mathfrak{V}$ are compatible, then $\mathfrak{U}$ is holomorphic if and only if $\mathfrak{V}$ is. We are now ready to define the notion of a holomorphic vector bundle:
+
+\begin{defn}\label{defn:1.3}
+    A \emph{holomorphic vector bundle} is a complex vector bundle $\pi: E \to X$ such that the map $\pi$ is holomorphic, together with an equivalence class of holomorphic atlases.
+\end{defn}
+
+\begin{ex}
+    Given any complex manifold $X$, we can always form the \emph{trivial bundle} of rank $r$ by $X \times \C^r \to X$, with the obvious projection.
+\end{ex}
+
+We will frequently make use of the following result:
+\begin{thm}\label{thm:1.4}
+    Let $\pi: E \to X$ be a holomorphic vector bundle and let $\{\vp_i: \pi^{-1}(U_i) \to U_i \times \C^n \}_{i \in I}$ be an atlas of $E$. On the intersection $U_i \cap U_j$, consider the maps  
+    \[\vp_{ij} := \vp_i \circ \vp_j^{-1} : (U_i \cap U_j) \times \C^n \to (U_i \cap U_j) \times \C^n.\]
+    There exist holomorphic maps $g_{ij}: U_i \cap U_j \to \GL_n(\C)$ (where $\GL_n(\C)$ is equipped with the topology it inherits as a subspace of $\C^{n^2}$) such that $\vp_{ij}(x, z) = (x, g_{ij}(x)\cdot z)$ for all $(x, z) \in (U_i \cap U_j) \times \C^n$. Moreover, on $U_i \cap U_j \cap U_k$, the maps $g_{ij}$ satisfy the following relation, known as the \emph{cocycle condition}:
+    \begin{equation}\label{eq:1.2}
+        g_{ij} \circ g_{jk} = g_{ik}
+    \end{equation}
+\end{thm}
+
+\begin{proof}
+    Clearly $\vp_{ij}$ is a fibre-preserving biholomorphism since both $\vp_i$ and $\vp_j$ are. Therefore $\vp_{ij}$ maps a fibre of $x$ over $(U_i \cap U_j) \times \C^n$ to another fibre of $x$ over $(U_i \cap U_j) \times \C^n$. Moreover, by restricting $\vp_{ij}$ to $\{x\} \times \C^n$, we get maps
+    \[\C^n \cong \{x\} \times \C^n \to E_x \to \{x\} \times \C^n \cong \C^n\]
+    both of which are linear isomorphisms by virtue of $\vp_i$ and $\vp_j$ being local trivializations. Therefore, for each $x \in U_i \cap U_j$, we have an element $\vp_{ij}|_{\{x\} \times \C^n} \in \GL_n(\C)$, so we have a map $f_{ij}: U_i \cap U_j \to \GL_n(\C)$ defined by $x \mapsto \vp_{ij}|_{\{x\} \times \C^n}$. Since $\vp_{ij}(x, z)$ is a fibre-preserving linear isomorphism, it must have the form $\vp_{ij}(x, z) = (x, f_{ij}(x) \cdot z)$ for some $f_{ij} \in \GL_n(\C)$. So if we set 
+    \[f_{ij} := g_{ij}(x) = \vp_{ij}|_{\{x\} \times \C^n}\] 
+    then we have $\vp_{ij}(x, z) = (x, g_{ij}(x) \cdot z)$ where $g_ij: U_i \cap U_i \to \GL_n(\C)$. It remains to be shown that each $g_{ij}$ is holomorphic and that (\ref{eq:1.2}) holds. $g_{ij}$ is a function with $n$ components $g_{ij}(x) = (g_{ij, 1}(x), \hdots, g_{ij, n}(x))$, so it is holomorphic if and only if each component is holomorphic. For any $k = 1, \hdots, n$, $g_{ij, k}$ has the form
+    \begin{align*}
+        g_{ij,k}: U_i \cap U_j &\to \C^n \\ 
+        x &\mapsto g_{ij}(x)e_k 
+    \end{align*}
+    (where $e_k$ denotes the $k^{th}$ standard basis vector). And the functions $f_{ij, k}$ are holomorphic, since each one is the composite of the holomorphic maps
+    \[(U_i \cap U_j) \times \{e_k\} \To{\vp_{ij}} (U_i \cap U_j) \times \C^n \To{\pr_{\C^n}} \C^n\]
+    where $\pr_{\C^n}$ is the projection onto $\C^n$. The cocycle condition $g_{ij} \circ g_{jk} = g_{ik}$ follows immediately from the fact that the maps $\vp_{ij}$ satisfy $\vp_{ij}\circ \vp_{jk} = \vp_{ik}$.
+\end{proof}
+
+\begin{defn}
+    Let $\pi: E \epi X$ be a holomorphic vector bundle with an atlas $\mathfrak{U} = \{\vp_i: \pi^{-1}(U_i) \to U_i \times \C^n\}$. The maps $g_{ij}: U_i \cap U_j \to \GL_n(\C)$ in Theorem \ref{thm:1.4} are called \emph{transition functions}, and the collection $(g_{ij})$ is called the \emph{gluing cocycle} associated to the atlas $\mathfrak{U}$.
+\end{defn}
+
+We can therefore think of a holomorphic vector bundle $E \to X$ as follows: Locally, $E$ looks like $U \times \C^n$ where $U \subseteq X$ is an open set. Globally, it is glued together using the cocycle $(g_{ij})$, where $g_{ij}: U_i \cap U_j \to \GL_n(\C)$ are holomorphic maps. The next example introduces two of the most important examples of vector bundles:
+\begin{ex}[The tangent and cotangent bundle]
+    Suppose $X$ is a complex manifold. For any $p \in X$, we can form the \emph{holomorphic tangent space} to $X$ at $p$, consisting of vectors tangent to $X$ at $p$. If $(U, z_1, \hdots, z_n)$ is a holomorphic chart on $X$, the holomorphic tangent space $T_pX$ has a basis given by $\{\frac{\partial}{\partial z_1}, \hdots, \frac{\partial}{\partial z_n}\}$. The \emph{holomorphic tangent bundle} is the holomorphic vector bundle $TX \to X$ constructed as
+    \[TX = \bigsqcup_{p \in X} T_p X\]
+    where the bundle map is given by $(x, v) \mapsto x$. The \emph{holomorphic cotangent bundle} $T^*X$ of $X$ is then defined as the dual of the bundle $TX$. On a local chart $(U, z_1, \hdots, z_n)$, the holomorphic cotangent bundle has a basis given by $\{dz_1, \hdots, dz_n\}$. For a Riemann surface, the cotangent bundle of $X$ is called the \emph{canonical bundle} associated to $X$, and is denoted by $K_X$. 
+\end{ex}
+
+\begin{warn}
+    If $X$ is not a Riemann surface, it is \emph{not} generally true that the canonical bundle is equal to the cotangent bundle. This happens to be a special property enjoyed by Riemann surfaces. Since we will only be considering Riemann surfaces in these notes, there is no harm in assuming $K_X = T^*X$.
+\end{warn}
+
+\subsection{Correspondence between vector bundles and sheaves}
+The formalism of sheaf theory provides a useful language with which to discuss holomorphic vector bundles on a complex manifold. As this is a vast subject, we will assume familiarity with the basics of sheaves in these notes. We refer the reader to \S 2.1 of Hartshorne's book \cite{hartshorne} for a detailed introduction to the subject. Before discussing sheaves, we first define the notion of a \emph{section}.
+
+
+\begin{defn}
+Let $\pi: E \to X$ be a complex vector bundle and $U \subseteq X$ be an open subset. A \emph{section} of $E$ over $U$ is a continuous map $s: U \to E$ such that $\pi \circ s = \id_U$. Hence if $s$ is a section of $E$ over $U$, we have $s(x) \in E_x$ for all $x \in U$. We say that a section $s$ is \emph{holomorphic} if it is holomorphic as a map between complex manifolds. A \emph{global holomorphic section} is a section $X \to E$ of $E$ over $X$. The space of global holomorphic sections of $E \to X$ is denoted by $\Omega^0(X, E)$ or $\Gamma(E, X)$ (we use the notation $\Omega^0(X, E)$ in these notes), and for an open subset $U \subseteq X$, $\Omega^0(X, E)$ (or $\Gamma(E, U)$) denotes the space of holomorphic sections of $E$ over $U$.
+\end{defn}
+
+Suppose $E \to X$ is a complex vector bundle of rank $r$. A \emph{local frame} for $E$ over an open subset $U \subseteq X$ is a collection of $r$ sections $\{e_1, \hdots, e_r\}$, such that the vectors $\{e_1(x), \hdots, e_r(x)\}$ form a basis for the fibre $E_x$. We can always find a \emph{local} frame for $E$, but the question of finding a \emph{global} frame is much more complicated. If $s$ is a section of $E$ over $U$, we can write $s$ as a linear combination of the basis vectors
+\[s(x) = \sum_{i = 1}^r s_i(x) e_i(x)\]
+where the coefficients $s_i(x)$ are holomorphic functions on $U$.
+
+\begin{ex}
+    If $X$ is a complex manifold, local frame for the tangent bundle $TX$ is given by $\left\{\frac{\partial}{\partial z_1}, \hdots, \frac{\partial}{\partial z_n}\right\}$. If $\chi: X \to TX$ is a section, we can write 
+    \[\chi = \sum_{i=1}^n \chi_i(z) \frac{\partial}{\partial z_i}.\]
+    Hence sections of the tangent bundle $TX$ are precisely vector fields on $X$! This can indeed be taken as the \emph{definition} of a vector field.
+\end{ex}
+
+\begin{defn}
+    If $X$ is a complex manifold, the \emph{sheaf of holomorphic functions} or \emph{structure sheaf} on $X$, denoted $\~O_X$, is defined by
+    \[\~O_X(U) = \{f: U \to \C : f \text{ holomorphic}\}\] 
+    for each open subset $U \subseteq X$. For any such open set $U$, $\~O_X(U)$ has a natural ring structure with pointwise addition and multiplication. $\~O_X$ therefore defines a sheaf of rings on $X$ in the obvious manner, where the restriction maps are given by the usual restriction of functions.
+\end{defn}
+
+\begin{rmk}
+The terminology ``cocycle'' in Definition \ref{thm:1.4} comes from the notion of cycles in algebraic geometry:  For each open set $U \subseteq X$, define $\GL_n \left(\~O_X(U) \right)$ to be the set of all $n \times n$ matrices with entries in $\~O_X(U)$. Given another open set $V \subseteq U$, we can define a restriction map $\GL_n \left(\~O_X(U) \right) \to \GL_n \left(\~O_X(V) \right)$ by restricting each entry of a matrix in $\GL_n(\~O_X(U))$ to $V$. This data defines a sheaf of rings, which we denote by $\GL_n \left(\~O_X \right)$. In this situation, we can define the (\v Cech) cocycles with values in $\GL_n \left(\~O_X \right)$ with respect to $\mathfrak{U}$ to be elements of the product
+\[Z^1 \left(\mathfrak{U}, \GL_n \left(\~O_X \right) \right) := \prod_{(i, j) \in I^2}\GL_n \left(\~O_X(U_i \cap U_j) \right),\]
+satisfying the relation $f_{ij} \circ f_{jk} = f_{ik}$. Theorem \ref{thm:1.4} tells us that for any holomorphic vector bundle with an atlas $\mathfrak{U}$, there is an associated cocycle of transition functions. 
+\end{rmk}
+
+Recall that a sheaf $\~E$ of $\~O_X$-modules is called \emph{locally free of rank $r$} if every point $x \in X$ has a neighbourhood $U \subseteq X$ such that 
+\[\~E|_U \cong \~O_U^{\oplus r}\]
+where $\~E|_U$ denotes the restriction of the sheaf $\~E$ to $U \subseteq X$. Hence $\~E$ is free if it is locally isomorphic to a free $\~O$-module of rank $r$. 
+
+Suppose $\pi: E \to X$ is a holomorphic vector bundle. We may define a sheaf $\~E$ of $\~O_X$-modules by assigning an open $U \subseteq X$ to the space of holomorphic sections of $E$ over $U$
+\[\~E(U) = \{\ s: U \to E \text{ holomorphic} : \pi \circ s = \id_U\},\]
+where the restriction maps are just usual restriction of functions. The $\~O_X$-module structure is given by pointwise addition of sections, and for $f \in \~O_X(U)$ and $s \in \~E(U)$, scalar multiplication $f \cdot s$ is similarly defined pointwise. Moreover, $E$ is a complex vector bundle, so it trivializes as:
+\[E|_{U_i} \cong U_i \times \C^r,\]
+Therefore a holomorphic section $s: U_i \to E|_{U_i}$ is locally given by a map 
+\[s(x) = \left(x, f_1(x), \hdots, f_r(x)\right), \quad f_j \in \~O_X(U_i),\]
+so the space of sections is 
+\[\~E(U_i) \cong \~O_X(U_i)^{\oplus r}.\]
+Hence $\~E$ is locally free of rank $r$. This gives us an easy way to construct a locally free sheaf from a given vector bundle.
+
+Now that we have discussed sections, we can introduce a different way of thinking about Holomorphic structures that is often useful:
+
+\begin{defn}
+    If $E \to X$ is a complex vector bundle, a $\bar{\partial}$-operator is a $\C$-linear map
+    \[\bar{\partial}_E: \Omega^0(X, E) \to \Omega^{0,1}(X, E)\]
+    satisfying the Leibniz rule
+    \[\bar{\partial}_E(fs) = \bar{\partial}f \otimes s + f \bar{\partial}_E s\]
+    where $f$ is a function and $s$ is a section of $E$. A $\bar{\partial}$-operator is called a \emph{holomorphic structure} if $\bar{\partial}^2 = 0$. A section $s$ of a holomorphic vector bundle $E \to X$ is called \emph{holomorphic} if $\bar{\partial}s = 0$.
+\end{defn}
+
+It turns out that these $\bar{\partial}$-operators completely determine a holomorphic structure on a complex vector bundle:
+\begin{prop}
+    A complex vector bundle $E \to X$ is holomorphic and only if it has a holomorphic structure $\bar{\partial}_E$.
+\end{prop}
+\begin{proof}
+See Theorem 3.2. in \cite{moroianu2006}.
+\end{proof}
+
+\subsection{Operations on vector bundles} We now define some additional constructions that will be useful in our study of Higgs bundles. 
+
+\begin{defn}
+Let $E \to X$ be a holomorphic vector bundle of rank $r$. The \emph{dual bundle} $E^* \to X$ is the vector bundle whose fibre over $x \in X$ is given by $E_x^* = \Hom(E_x, \C)$.
+\end{defn}
+
+\begin{defn} Let $\pi: E \to X$ be a holomorphic vector bundle of rank $r$.
+\begin{enumerate}[(i)]
+    \item A \emph{subbundle} of rank $k \le r$ is a submanifold $F \subseteq E$ together with a linear subspace $F_x \le E_x$ at each point $x \in X$, such that the restriction $\pi|_F : F \to X$ has the structure of a holomorphic vector bundle.
+
+    \item Given a holomorphic vector bundle $E\to X$ and a subbundle $F\subseteq E$, we define the \emph{quotient bundle} $E/F \to X$ to be the vector bundle whose fibres are given by 
+        \[(E/F)_x = E_x/F_x \quad \text{for all } x \in X,\]
+    where $E_x/F_x$ is the usual quotient of vector spaces.
+\end{enumerate}
+\end{defn}
+
+\begin{ex}
+Observe that if $f: E_1 \to E_2$ is a morphism of bundles, the kernel $\ker(f) \subseteq E_1$ is a subbundle of $E_1$, and $\im(f) \subseteq E_2$ is a subbundle of $E_2$. We may therefore define a the notion of a short exact sequence $0 \to E_1 \to E_2 \to E_3 \to 0$ of vector bundles in the usual manner.
+\end{ex}
+
+\begin{ex}[The determinant line bundle]
+    Given a holomorphic vector bundle $E \to X$ of rank $r$, the \emph{determinant line bundle} $\det(E)$ is the line bundle $\det(E) \to X$ with 
+    \[\det(E)_x = \bigwedge^{r} E_x.\]  
+    Observe that $\det(E)$ is indeed a line bundle, since if $\{v_1, \cdots, v_r\}$ is a basis for $E_x$, then $\{v_1 \wedge \cdots \wedge v_r\}$ is a basis for $\det(E)_x$. It is often much simpler to deal with line bundles as opposed to more general vector bundles. The determinant bundle is an easy way to construct a line bundle from a vector bundle.
+\end{ex}
+
+ 
+Our next task is to define tensor products of vector bundles.
+
+\begin{defn}
+    Suppose we are given holomorphic vector bundles $E, F$ over the same space $X$. The \emph{tensor product} of $E$ and $F$, denoted $E \otimes F$, is the bundle $E \otimes F  \to X$ whose fibre over $x \in X$ is given by
+    \[(E \otimes F)_x = E_x \otimes F_x.\]
+    If $E$ and $F$ have transition functions $\{g_{ij}\}$ and $\{h_{ij}\}$ respectively (with respect to some open cover $\{U_i\}$ of $X$), then $E \otimes F$ has transition functions $g_{ij} \otimes h_{ij}$, where $\otimes$ is the usual tensor product for matrices. Observe that if $\rk(E) = n$ and $\rk(F) = m$, then $\rk(E \otimes F) = nm$.
+\end{defn}
+
+\begin{ex}
+    Recall that given a vector space $V$, the set $\End(V)$ of endomorphisms $V \to V$ has a natural vector space structure under the operations of pointwise addition and scalar multiplication. If $\{e_1, \hdots, e_n\}$ is a basis for $V$ and $\{e^1, \hdots, e^n\}$ is the corresponding dual basis, we have a linear isomorphism $\End(V) \cong V \otimes V^*$ given by $A \mapsto \sum_{i,j} a_i e_i \otimes e^j$.
+
+    We can extend this correspondence to vector bundles: If $E \to X$ is a holomorphic vector bundle, the \emph{endomorphism bundle} of $E$ is the bundle defined by $\End(E) = E \otimes E^*$. The fibre of $\End(E)$ over a point $x \in X$ is therefore given by 
+    \[\End (E)_x = (E \otimes E^*)_x = E_x \otimes E_x^* = \End(E_x).\]
+    We will use the notation $\End_0(E)$ to denote the collection of traceless endomorphisms of $E$. Even more generally, if $E_1, E_2$ are vector bundles, then 
+    \[\Hom(E_1, E_2) \cong E_1^* \otimes E_2.\]
+\end{ex}
+
+\subsection{Connections and Hermitian metrics}
+In this section $E \to X$ denotes a complex vector bundle of rank $r$, and $\{e_i\}$ is a local frame of smooth sections for $E|_{U_i}$. Recall that $\Omega^k(X)$ denotes the space of differential $k$-forms on $X$. We denote by $\Omega_0(X, E)$ the space of smooth sections of $E \to X$. For $k \ge 1$, we denote by $\Omega^k(X, E)$ the space of $E$-valued differential $k$-forms on $X$. This sounds complicated, but elements in $\Omega^k(X, E)$ actually have a very simple form. In terms of the local frame $\{e_i\}$, an element $\omega \in \Omega^k(X, E)$ can be written as
+\[\omega = \sum_i \omega_i \otimes e_i, \quad \omega_i \in \Omega^k(X).\]
+\begin{defn}
+    Let $X$ denote a compact Riemann surface and $E \to X$ a complex vector bundle. A \emph{connection} on $E$ is a $\C$-linear map
+    \[\nabla: \Omega^0(X, E) \to \Omega^1(X, E)\]
+    satisfying the \emph{Leibniz rule}:
+    \[\nabla(fs) = df \otimes s + f \nabla s,\]
+    where $f: X \to \C$ is a function and $s$ is a section of $E \to X$. For $k \ge 1$, $\nabla$ extends to a map 
+    \[\nabla^k: \Omega^k(X, E) \to \Omega^{k + 1}(X, E)\]
+    defined by
+    \[\nabla (\omega \otimes s) = d \omega \otimes s + (-1)^k \omega \wedge \nabla s \]
+    where $\omega \in \Omega^k(X)$ and $s$ is a section of $E \to X$.
+\end{defn}
+
+Write $\frak{g}_E$ for the bundle of skew-Hermitian endomorphisms of $E$ (i.e., those endomorphisms $\psi \in \End(E)$ with $\psi^* = -\psi$). The fibre of this bundle over $x \in X$ is the Lie algebra of the unitary group $U(r)$ (where $r = \rk(E)$). For further details, readers should consult Chapter 2 of Donaldson and Kronheimer's book \cite{DK1990} . Given a local trivialization $E|_U \cong U \times \C^n$, a connection can be written as $\nabla = d + A$, where $d$ is the usual differential operator and $A$ is an $n \times n$ matrix of 1-forms called a \emph{connection 1-form}. The connection $\nabla$ acts on a section $s = \sum_{i = 1}^n s_i e_i$ as follows:
+\[\nabla s = \sum_{i=1}^n (ds_i) e_i + \sum_{i, j = 1}^n s_i A_{ij} e_j,\]
+which can be written more elegantly in matrix notation as
+\[\nabla s = d s + A s.\]
+
+\begin{defn}
+    Given a connection $\nabla$ on $E \to X$, we define the \emph{curvature} $F_\nabla$ of $\nabla$ by 
+    \[F_\nabla = \nabla^2.\]
+    A connection is said to be \emph{flat} or \emph{integrable} if its curvature vanishes (i.e., $F_\nabla = 0$).
+\end{defn}
+
+\begin{ex}
+    Let us determine an expression for the curvature $F_\nabla = \nabla^2$. Fix a local frame $\{e_i\}$ of $E$, so that $\nabla$ can be represented using a connection 1-form $A$, as described above. Take a section $s \in \Omega^0(X, E)$. Then 
+    \begin{align*}
+        \nabla^2 s &= \nabla(ds + A s) \\ 
+                        &= d^2 s + (dA)s - A \wedge d s + A \wedge \left(d s + A s \right)\\ 
+                        &= 0 + (dA)s - A \wedge d s + A \wedge d s + (A \wedge A)s
+    \end{align*}
+    so we see that the curvature of $\nabla$ is given by 
+    \[F_\nabla = dA + A \wedge A.\]
+\end{ex}
+
+\begin{defn}
+    A \emph{Hermitian inner product} on a complex vector space $V$ is a complex-valued bilinear form $h$ on $V$ which is positive definite and antilinear in the second spot. This means a hermitian inner product is a map $h: V \times V \to \C$ satisfying the following properties for all $u, v, w \in V$ and all $\alpha \in \C$:
+    \begin{enumerate}[(i)]
+        \item $h(u + v, w) = h(u, w) + h(v, w)$,
+        \item $h(u, v + w) = h(u, v) + h(u, w)$,
+        \item $h(\alpha u, v)=  \alpha h(u, v)$,
+        \item $h(u, \alpha v) =  \overline{\alpha} h(u, v)$,
+        \item $h(u, v) = \overline{h(v, u)}$,
+        \item $h(u, u) \ge 0$, with equality only if $u = 0$.
+    \end{enumerate}
+\end{defn}
+
+Recall from linear algebra that the \emph{Hermitian transpose} or \emph{conjugate transpose} of a matrix $A \in \M_n(\C)$ is the matrix $A^* = \overline{A^T}$. A matrix $A \in \M_n(\C)$ is called \emph{Hermitian} if $A = A^*$.
+
+\begin{defn}
+    Let $E \to X$ be a complex vector bundle of rank $r$. A \emph{Hermitian metric} $h$ on $E$ assigns to each point $x \in X$ a Hermitian inner product
+    \[h_x: E_x \times E_x \to \C\]
+    such that this assignment varies smoothly in $x$. A \emph{Hermitian vector bundle} is a vector bundle equipped with a hermitian metric.
+\end{defn}
+
+Suppose $U \subseteq X$ is an open set where $E$ is trivial: $E|_U \cong U \times \C^n$, and for $x \in U$, let $\{e_1(x), \hdots, e_n(x)\}$ be a local frame for $E$ over $U$. We can express $h$ locally as an $n \times n$ matrix $H(x) = (h_{ij}(x))$ where
+\[h_{ij}(x) = h_x(e_i(x), e_j(x)), \quad i, j = 1, \hdots, n.\]
+When we say that the assignment $x \mapsto h_x$ ``varies smoothly in $x$'', we mean that the functions $h_{ij}$ are smooth on $U$. Now the $h_{ij}$'s satisfy the properties of a Hermitian metric, so the matrix $H(x)$ is Hermitian: $H(x) = H^*(x)$ (also note that this means $H(x)$ is positive-definite). Given sections $s = \sum_{i=1}^n s_ie_i$ and $t = \sum_{j=1}^n t_j e_j$, one has
+\[h_x(s, t) = \sum_{i, j = 1}^n s_i(x) \overline{t_j(x)} H_{ij}(x),\]
+so if $\vec{s}(x) = (s_1(x), \hdots, s_n(x))^T$ and $\vec{t}(x) = (t_1(x), \hdots, t_n(x))^T$, we can write 
+\[h_x(s, t) = \vec{t}(x)^* H(x) \vec{s}(x)\]
+
+\begin{ex}
+    Let $X$ be any complex manifold. On the trivial bundle $E = X \times \C^n$, a hermitian metric $h$ can be written as $h_x(u, v) = v^* H(x) u$, where $u, v \in \C^n$ and $H(x)$ is a positive-definite Hermitian matrix. If $H(x) = I$ for all $x$, then $h$ is the standard Hermitian metric on $\C^n$. 
+\end{ex}
+
+\begin{defn}
+    Let $E \to X$ be a complex vector bundle with a hermitian metric $h$. A connection $\nabla$ on $E$ is said to be \emph{unitary} if the following identity holds for all sections $s_1, s_2$:
+    \[dh(s_1, s_2) = h(\nabla s_1, s_2) + h(s_1, \nabla s_2).\]
+\end{defn}
+
+
+\section{Higgs bundles}
+\subsection{Stability}
+From this point forward, we will work on a Riemann surface $X$ of genus $g \ge 2$\footnote{The results we describe can be extended to the case where $g < 2$, but more care has to be taken in this context.}. Suppose $E \to X$ is a holomorphic vector bundle. We have already met the \emph{rank} of $E$ 
+\[\rk(E) = \dim E_x,\]
+however, there is another crucial invariant that we have yet to introduce. Suppose $D: X \to \Z$ is a divisor on $X$, represented by a formal sum $D = \sum_{p \in X} D(p) \cdot p$, and denote by $\Div(X)$ the additive abelian group of divisors on $X$. The \emph{degree} of a divisor $D: X \to \Z$ is given by 
+\[\deg(D) = \sum_{p \in X} D(p).\]
+This defines a map $\deg: \Div(X) \to \Z$. Recall that if $f$ is a nonzero meromorphic function defined on a connected open subset $U \subseteq \C$, we define the divisor associated to $f$ by
+\[\div(f) = \sum_{p \in X} \ord_p(f) \cdot p.\]
+A \emph{principal divisor} on $X$ is one of the form $\div(f)$ for some meromorphic function $f$. The collection $\PDiv(X)$ of principal divisors on $X$ defines a subgroup of $\Div(X)$. Two divisors $D, D' \in \Div(X)$ are said to be \emph{linearly equivalent} (written $D \equiv D'$) if $D - D'$ is a principal divisor, i.e., there is some nonzero meromorphic function $f$ so that $D = D' + \div(f)$. The \emph{Picard group} $\Pic(X)$\footnote{Some authors use the notation $\Pic_0(X)$ to denote what we refer to as $\Pic(X)$.} of $X$ is then defined as
+\[\Pic(X) = \frac{\Div(X)}{\PDiv(X)},\]
+i.e., $\Pic(X)$ is the group of divisors modulo linear equivalence. To each $D \in \Pic(X)$, we can associate a line bundle (invertible sheaf) $\~L(D) = \{f \text{ meromorphic on } U : \div(f) + D \ge 0\}$, and the assignment $D \mapsto \~L(D)$ defines a bijective correspondence between $\Pic(X)$ and the group of holomorphic line bundles on $X$ (for a more detailed discussion of this correspondence, see \S 2.6 of Hartshorne's book \cite{hartshorne}). We therefore identify elements of $\Pic(X)$ with holomorphic line bundles on $X$. 
+
+\begin{defn}
+    Given a holomorphic line bundle $L \cong \~L(D)$ in $\Pic(X)$, the \emph{degree} of $L$, denoted $\deg(L)$, is the degree of the divisor $D$ associated to $L$. More generally, if $E$ is a holomorphic vector bundle over $X$, we define the degree of $E$ to be the degree of the determinant line bundle $\det(E) = \bigwedge^{\rk(E)}E$. In symbols, $\deg(E)= \deg(\det(E))$.
+\end{defn}
+
+\begin{defn}
+    Let $E \to X$ be a holomorphic vector bundle. We define the \emph{slope} $\mu(E)$ of $E$ by
+    \[\mu(E) = \frac{\deg(E)}{\rk(E)}.\]
+\end{defn}   
+
+\begin{defn}
+    A vector holomorphic vector bundle $E \to X$ is called \emph{stable} if for any subbundle $F \subseteq E$, we have $\mu(F) < \mu(E)$. $E$ is called \emph{semistable} if we allow equality in the definition of a stable bundle; that is, $E$ is semistable if for any subbundle $F \subseteq E$, we have $\mu(F) \le \mu(E)$. Finally, we say $E$ is \emph{polystable} if $E$ admits a decomposition $E = E_1 \oplus E_2 \oplus \cdots \oplus E_N$ with each $E_i$ stable and $\mu(E_1) = \mu(E_2) = \cdots = \mu(E_N)$.
+\end{defn}
+
+Stability conditions for vector bundles were first introduced by Mumford in \cite{mumford62}. In their influential paper \cite{HN}, Harder and Narasimhan made substantial contributions to the theory of stable vector bundles, establishing many foundational results.
+
+\begin{ex}
+    Line bundles have no non-trivial subbundles, so they are easily seen to be stable. If $E$ is (semi)stable and $L$ is a line bundle, then $E \otimes L$ is (semi)stable.
+\end{ex}
+
+\subsection{Definition of Higgs bundles} We begin this section by constructing a moduli space of holomorphic vector bundles. To make this precise, we will need the stability conditions introduced in the previous section. Roughly speaking, these conditions help to exclude ``bad'' vector bundles from our moduli space. In particular, we will be interested in the moduli space of \emph{stable} holomorphic vector bundles:
+\begin{defn}
+    We denote by $\~N_X(r,d)$ (or simply $\~N(r, d)$ when $X$ is clear from context) the moduli space of stable vector bundles with degree $d$ and rank $r$. The points of $\~N_X(r,d)$ are holomorphic vector bundles $E \to X$ of slope $\mu(E) = \frac{d}{r}$. If $r$ and $d$ are coprime, then $\~N_X (r, d)$ is smooth.
+\end{defn}
+
+\begin{defn}
+    Let $E$ denote a representative class in $\~N (r, d)$ (i.e., $E \to X$ is a holomorphic vector bundle). The \emph{tangent space} to $\~N(r, d)$ at $E$ is given by the first cohomology group of $X$, valued in the traceless endomorphisms of $E$:
+    \begin{equation} 
+        T_E\~N(r, d) = H^1 \left(X, \End_0 E \right) = H^1 \left(X, E \otimes E^*\right).
+    \end{equation}
+\end{defn}
+
+Notice that by Serre duality\footnote{More detailed accounts of Serre duality can be found in a number of different texts, see for example \S 5.3 in \cite{miranda} or \S 3.7 in \cite{hartshorne}.} one has
+\begin{equation}
+    T_E \~N(r, d) = H^1 \left(X, E \otimes E^*\right) \cong H^0(X, K_X \otimes \End_0E^*)
+\end{equation}
+and moreover, $K_X \otimes \End_0(E^*) \cong K_X \otimes E \otimes E^*$. An element $\psi \in H^0(X, K_X \otimes \End_0E^*)$ is a global holomorphic section of $K_X \otimes \End_0 (E^*)$. It is natural to ask what these global sections look like, and this is the starting point for Higgs bundles.
+
+We are now ready to define the notion of a Higgs bundle. Higgs bundles were first defined by Hitchin in \cite{hitchin1987A}, and then generalized by Simpson in his landmark paper \cite{simpson92}. In these notes we are working on compact Riemann surfaces of genus $g \ge 2$, which is the setting originally considered by Hitchin. 
+\begin{defn}
+    A \emph{Higgs bundle} on $X$ is a pair $(E, \Phi)$ where $E \to X$ is a holomorphic vector bundle and $\Phi$ is a holomorphic section of $K_X \otimes \End_0(E)$ (or equivalently, a holomorphic map $\Phi: E \to E \otimes K_X$) called the \emph{Higgs field}. A \emph{Higgs subbundle} (or \emph{$\Phi$-invariant} subbundle) is a holomorphic subbundle $F$ of $E$ such that $\Phi(F) \subseteq F \otimes K_X$. The restriction $\Phi_F := \Phi|_F$ then makes $(F, \Phi_F)$ a Higgs bundle. Similarly, $\Phi$ induces a Higgs bundle structure on the quotient $E/F$.
+\end{defn}
+Given Higgs bundles $(E_1, \Phi_1)$ and $(E_2, \Phi_2)$, a morphism $f: (E_1, \Phi_1) \to (E_2, \Phi_2)$ is a holomorphic bundle map $f: E_1 \to E_2$ rendering the following diagram commutative:
+\begin{equation}\label{eq:1.5}
+\begin{tikzcd}
+    {E_1} & {E_1 \otimes K_X} \\
+    {E_2} & {E_2 \otimes K_X}
+    \arrow["{\Phi_1}", from=1-1, to=1-2]
+    \arrow["f"', from=1-1, to=2-1]
+    \arrow["{f \otimes \id}", from=1-2, to=2-2]
+    \arrow["{\Phi_2}"', from=2-1, to=2-2]
+\end{tikzcd}
+\end{equation}
+\begin{ex}
+    If $E$ is a Higgs bundle and $F \subseteq E$ subbundle, the inclusion $F \mono E$ defines a morphism of Higgs bundles.
+\end{ex}
+
+\begin{rmk}
+    Hitchin coined the term ``Higgs field'', in honour of physicist Peter Higgs. Readers with knowledge of particle physics are invited to consult Hitchin's original paper \cite{hitchin1987A} for a more detailed explanation of this naming convention. 
+\end{rmk}
+
+
+\begin{ex}\label{ex:1.23}
+    Suppose $(E_1, \Phi_1)$ and $(E_2, \Phi_2)$ are Higgs bundles and let $f: E_1 \to E_2$ be a holomorphic morphism of bundles. Then $\ker(f) \subseteq E_1$ is a $\Phi_1$-invariant subbundle and $\im(f) \subseteq E_2$ is a $\Phi_2$-invariant subbundle. Indeed, for any $v \in \ker(f)$, the fact that (\ref{eq:1.5}) commutes tells us that 
+    \[\Phi_2(f(v)) = 0 = f(\Phi_1(v)),\]
+    hence $\Phi_1(v) \in \ker(f) \otimes K_X$, i.e., $\Phi_1(\ker(f)) \subseteq \ker(f) \otimes K_X$, so we see that $\ker(f) \subseteq E_1$ is a $\Phi_1$-invariant subbundle. Similarly, for $v \in E_1$, we have
+    \[\Phi_2(f(v)) = f(\Phi_1(v)),\]
+    so $\Phi_2(\im(f)) \subseteq \im(f) \otimes K_X$, so $\im(f)$ is $\Phi_2$-invariant.
+\end{ex}
+
+\begin{ex}
+    A \emph{square root} of a bundle $E$ is a line bundle $L$ such that $L \otimes L = E$. Given that we are working on a Riemann surface of genus $g \ge 2$, we can take square roots of the canonical bundle $K$ of $X$ (in fact, since $\deg(K) = 2g - 2$, there are exactly $2g$ square roots of $K$). Let $K^{1/2}$ be one such square root, write $K^{-1/2} = (K^{1/2})^*$, and set $E = K^{1/2} \oplus K^{-1/2}$. Let us find a Higgs field $\Phi$ for $E$. This Higgs field must be a holomorphic map $E \to E \otimes K$. Here $E = K^{1/2} \oplus K^{-1/2}$, so $\Phi$ can represented by a matrix
+    \[\Phi = \begin{pmatrix} \Phi_{11} & \Phi_{12} \\ \Phi_{21} & \Phi_{22} \end{pmatrix},\] 
+    where
+    \[\Phi_{11}: K^{1/2} \to K^{1/2} \otimes K, \quad \Phi_{12}: K^{-1/2} \to K^{1/2} \otimes K, \quad \Phi_{21}: K^{1/2} \to K^{-1/2} \otimes K, \quad \Phi_{22}: K^{-1/2} \to K^{-1/2} \otimes K.\]
+    Since we want $\Phi$ to be traceless, we will take this matrix to be anti-diagonal (i.e., $\Phi_{11} = \Phi_{22} = 0$). So we can write
+    \[\Phi = \begin{pmatrix} 0 & \alpha \\ \beta & 0 \end{pmatrix},\] 
+    where $\alpha: K^{-1/2} \to K^{1/2} \otimes K$ and $\beta: K^{1/2} \to K^{-1/2} \otimes K$. We have isomorphisms $K^{1/2} \otimes K \cong K^{3/2}$ and $K^{-1/2} \oplus K \cong K^{1/2}$, so $\alpha \in \Hom(K^{-1/2}, K^{3/2}) \cong K^2$ and $\beta \in \Hom(K^{1/2}, K^{1/2}) \cong \~O_X$ (the second isomorphism comes from the fact that $K^{1/2}$ is a line bundle, so its endomorphisms are locally multiplication by functions). As $X$ is compact, the map $\beta$ must therefore be \emph{constant}, say $\beta = 1$. From this, we get a whole family of Higgs fields for $E = K^{1/2} \oplus K^{-1/2}$, given by
+    \[\Phi_\alpha = \begin{pmatrix} 0 & \alpha \\ 1 & 0 \end{pmatrix}, \quad \alpha \in K^2.\]
+    An element of $K^2$ is called a \emph{quadratic differential}, so we have a different Higgs bundle structure for each quadratic differential $\alpha$. The simplest possible case is when $\alpha$ is the zero differential: 
+    \[\Phi_0 = \begin{pmatrix} 0 & 0 \\ 1 & 0 \end{pmatrix}.\]  
+    Note that $E$ is not stable as a holomorphic vector bundle, but it \emph{is} stable as a Higgs bundle, since the only $\Phi_0$-invariant sub-line bundle is $K^{-1/2}$, which has negative degree. Wentworth (\cite{wentworth2015}, Example 2.14) calls these bundles \emph{Fuchsian}. While simple, they have many interesting properties (see for example \cite{hitchin92, hitchin1987A, hitchin1987B}).
+\end{ex}
+
+
+\subsection{Stable Higgs bundles} We would like to construct a moduli space of Higgs bundles. To do this, we again need to introduce stability conditions.  
+\begin{defn}
+    We say that a Higgs bundle $(E, \Phi)$ is \emph{stable} if for any Higgs subbundle $F \subseteq E$ we have $\mu(F) < \mu(E)$. We say $(E, \Phi)$ is \emph{semistable} if for any Higgs subbundle $F \subseteq E$, we have $\mu(F) \le \mu(E)$. We say $(E, \Phi)$ is \emph{polystable} if it is a direct sum of stable Higgs subbundles of the same slope.
+\end{defn}
+
+
+A useful result is the following:
+\begin{lem}
+    Let $(E_1, \Phi_1)$ and $(E_2, \Phi_2)$ be Higgs bundles, and let $f: (E_1, \Phi_1) \to (E_2, \Phi_2)$ be a morphism of holomorphic bundles (so (\ref{eq:1.5}) commutes). Suppose $(E_1, \Phi_1)$ and $(E_2, \Phi_2)$ are semistable with $\mu(E_1) > \mu(E_2)$. Then $f = 0$. If $\mu(E_1) = \mu(E_2)$ and of $E_1, E_2$ is stable, then either $f = 0$ or $f$ is an isomorphism.
+\end{lem}
+
+\begin{proof}
+    We will prove the first statement, namely that $\mu(E_1) > \mu(E_2)$ implies $f = 0$. Suppose $f \ne 0$. Then $\im(f) \subseteq E_2$ is a nonzero subbundle. Recall from Example \ref{ex:1.23} that $\ker(f) \subseteq E_1$ is a $\Phi_1$-invariant subbundle, so since $E_1$ is semistable, we have
+    \[\mu(\ker(f)) \le \mu(E_1)\] 
+    Similarly, the fact that $\im(f) \subseteq E_2$ is $\Phi_2$-invariant tells us that
+    \begin{equation}\label{eq:1.6}
+    \mu(\im(f)) \le \mu(E_2) < \mu(E_1).
+    \end{equation}
+    Now, we have a short exact sequence
+    \[0 \to \ker(f) \to E_1 \to \im(f) \to 0,\]
+    and the slopes satisfy:
+    \[\mu(E_1) = \frac{\rk(\ker(f))\mu(\ker(f)) + \rk(\im(f))\mu(\im(f))}{\rk(E_1)}.\]
+    Put $r_1 = \rk(\ker(f))$ and $r_2 = \rk(\im(f))$. Then $\rk(E_1) = r_1 + r_2$, so
+    \[\mu(E_1) = \frac{r_1 \mu(\ker(f)) + r_2 \mu(\im(f))}{r_1 + r_2},\]
+    and rearranging, we obtain
+    \[r_2 \mu(E_1) = r_1\left( \mu(\ker(f)) - \mu(E_1) \right) + r_2 \mu(\im(f)),\]
+    and $ r_1\left( \mu(\ker(f)) - \mu(E_1) \right)  \le 0$, so we deduce that 
+    \[r_2\mu(E_1) \le r_2 \mu(\im(f)).\]
+    But now if $r_2 \ne 0$, (\ref{eq:1.6}) gives $\mu(E_1) \le \mu(\im(f)) < \mu(E_1)$. Hence $r_2 = \rk(\im(f)) = 0$, so the only possibility is $f = 0$, a contradiction. The second assertion follows by a similar argument. 
+\end{proof}
+
+For any Higgs bundle $(E, \Phi)$, we may construct the \emph{Harder-Narasimhan filtration} of $(E, \Phi)$. This is a filtration by Higgs subbundles
+\[0 = (E_0, \Phi_0) \subseteq (E_1, \Phi_1) \subseteq \cdots \subseteq (E_n, \Phi_n) = (E, \Phi)\]
+with the property that the quotients 
+\[(Q_i, \Phi_{Q_i}) = (E_i, \Phi_i)/(E_{i-1}, \Phi_{i-1})\]
+are semistable for all $i$, and such that the slopes satisfy
+\[\mu(Q_i) > \mu(Q_{i+1}).\]
+The collection $\{\mu_i = \mu(Q_i) : 0 \le i \le n \}$ is an important invariant of the Higgs bundle $(E, \Phi)$. We represent this collection by the vector $\vec{\mu}(E, \Phi) = (\mu_1, \hdots, \mu_n)$, which is called the \emph{Harder-Narasimhan type} of $(E, \Phi)$. We can define a partial ordering on these Harder Narasimhan types as follows: If $\vec{\mu}$ and $\vec{\lambda}$ are two $n$-tuples with $\mu_1 \ge \cdots \ge \mu_n$, $\lambda_1 \ge \cdots \ge \lambda_n$, and $\sum_{i = 1}^n \mu_i = \sum_{i = 1}^n \lambda_i$, we define
+\[\vec{\lambda} \le \vec{\mu} \iff \sum_{j \le k} \lambda_i \le \sum_{j \le k} \mu_j.\]
+This ordering is called the \emph{Harder-Narasimhan stratification}.
+
+When $(E, \Phi)$ is a semistable Higgs bundle, there is a similar filtration where all the successive quotients have the same slope (equal to the slope $\mu(E)$). This is known as the \emph{Seshadri filtration} (introduced in \cite{seshadri1967}), and its associated graded $\Gr_S(E, \Phi)$ is polystable by construction. 
+
+\begin{ex}
+    Let $(E, \Phi)$ be a Higgs bundle, $F \subseteq E$ a Higgs subbundle, and write $Q = E/F$ for the quotient bundle. Then we have a natural short exact sequence
+    \[0 \to F \to E \to Q \to 0.\]
+    Suppose $\rk(F) = \rk(Q) = 1$ and $\deg(F) > \deg(Q)$. Then the Harder-Narasimhan filtration of $E$ is given by $0 \subseteq F \subseteq E$.
+\end{ex}
+
+\subsection{The Moduli space}
+
+Let $E \to X$ be a rank $r$ Hermitian vector bundle with metric $h$. Recall that a holomorphic structure on $E$ is equivalent to a choice of $\bar{\partial}$-operator $\bar{\partial}_E$ satisfying the Leibniz rule. We can always get a $\bar{\partial}$-operator from connection $\nabla$ by taking its $(0, 1)$-part, which we denote by $\nabla''$. Moreover, every $\bar{\partial}$-operator gives rise to a unique unitary connection $d_A = (\bar{\partial}_E, h)$, called the \emph{Chern connection} (see Theorem 4.3 in \cite{moroianu2006} for a more detailed discussion). It is the unique unitary connection satisfying $d_A'' =\bar{\partial}_E $.
+
+We denote by $\~A_E$ the space of unitary connections on $E$. As the Chern connection establishes a one-to-one correspondence between unitary connections and holomorphic structures, we may identify $\~A_E$ with the space of holomorphic structures on $E$.
+
+\begin{defn}
+    Given a rank $r$ Hermitian vector bundle $E \to X$, we define the \emph{gauge group} of $E$ to be the collection of smooth sections of the endomorphism bundle $\End(E)$ that are unitary: 
+    \[\~G_E = \{g \in \Omega^0(X, \End(E)) : gg^* = I\}.\]
+    If we also impose the condition $\det g = 1$, we obtain the \emph{special unitary gauge group}. The \emph{complex gauge group} $\~G_E^\C$ is the complexification of $\~G_E$, given by
+    \[\~G_E^\C = \{g \in \Omega^0(X, \End(E)) : g \text{ is invertible}\}.\]
+    Note that elements in $\~G_E^\C$ are not required to be unitary.
+\end{defn}
+
+The gauge group acts on the space of unitary connections $\~A_E$ by conjugation:
+\[g \cdot d_A = g \circ d_A \circ g^{-1}, \quad g \in \~G_E, d_A \in \~A_E.\]
+If $d_A = d + A$, then this action can be written as
+\[g \cdot d_A = d_{g(A)} = d + \left(g A g^{-1} + (dg)g^{-1}\right)\] 
+Because the Chern connection identifies $\~A_E$ with the space of holomorphic structures, the complex gauge group $\~G_E^\C$ also acts on $\~A_E$: If $\bar{\partial}_E = d_A''$ is the $(0,1)$-part of the connection $d_A$ defining the holomorphic structure, then $g \in \~G_E^\C$ acts as follows:
+\[g \cdot \bar{\partial}_E = g \circ \bar{\partial}_E \circ g^{-1}.\]
+So if  $\bar{\partial}_E = d''_A$, $g(A)$ is the Chern connection of $g \circ \bar{\partial_E} \circ g^{-1}$. 
+
+If $(E, \Phi)$ is a Higgs bundle, we will identify $E$ with the connection $A$ defining the holomorphic structure $d_A$ on $E$. Hence we can think of a Higgs bundle as either a pair $(E, \Phi)$ of a vector bundle and a section $\Phi$, or a pair $(A, \Phi)$ where $A \in \~A_E$ and $\Phi$ is a section compatible with the holomorphic structure $d_A$ (i.e., $d_A'' \Phi = 0$).   
+\begin{defn}
+    We define the space of Higgs bundles $\~B_E$ by
+    \[\~B_E = \left\{(A, \Phi) \in \~A_E \times \Omega^0 \left(X, K_X \otimes \End_0(E)\right) : d''_A\Phi = 0 \right\},\]
+    and we write $\~B_E^{ss} \subset \~B_E$ for the space of semistable Higgs bundles. 
+\end{defn}
+We are now ready to define a moduli space of Higgs bundles:
+\begin{defn}
+    The \emph{Dolbeault moduli space} is the moduli space $\frak{M}_D^r$ of rank $r$ semistable Higgs bundles on $X$ with fixed determinant. It is defined by
+    \[\frak{M}_D^r = \~B_E^{ss}\sslash\~G_E^\C,\] where the notation $\sslash$ denotes a GIT quotient, meaning that the gauge orbits of $(E, \Phi)$ and $\Gr_S(E, \Phi)$ are identified.
+\end{defn}
+
+\begin{rmk}
+    We have been somewhat vague in our definition of $\frak{M}_D^r$, but there is lots to be said about the topology of this space. In \cite{simpson1994}, Simpson gives an explicit construction of $\frak{M}_D^r$ using geometric invariant theory, and in \cite{kobayashi87}, Kobayashi describes how $\frak{M}_D^r$ can be endowed with the structure of the structure of a complex analytic space.
+\end{rmk}
+
+For a Higgs bundle $(E, \Phi)$ of rank $r$, the characteristic polynomial of $\Phi$ is
+\[\det(\lambda - \Phi) = \lambda^r +p_1(\Phi) \lambda^{r-1} + \cdots + p_r(\Phi),\]
+where $p_i(\Phi) \in H^0(X, K_X^{\otimes i})$. The \emph{Hitchin base} is the vector space
+\[\~B = \bigoplus_{i=1}^r H^0(X, K_X^{\otimes i})\]
+parametrizing all possible coefficients $(p_1, \hdots, p_r)$. In this situation, the \emph{Hitchin fibration} is the map $\frak{M}_D^r \to \~B$ given by
+\[(E, \Phi) \mapsto (p_1(\Phi), \hdots, p_r(\Phi)).\]
+This map turns out to be an incredibly deep mathematical object. Hitchin provided a systematic study of its fibres in his paper \cite{hitchin1987B}. Notably, he showed that the generic fibre of this map is abelian variety, namely the \emph{Prym variety}. One of the most important results about the Hitchin fibration is the following:
+\begin{thm}
+    The Hitchin fibration $\frak{M}_D^{r} \to \~B$ is proper (that is, the preimage of a compact set under this map is compact).
+\end{thm}
+\begin{proof}
+A proof using Uhlenbeck compactness is given in \S2.3 of \cite{wentworth2015}.
+\end{proof}
+Suppose $(E, \Phi)$ is a Higgs bundle with Hermitian metric $h$. Recall that the \emph{adjoint} of $\Phi$ is the unique linear operator $\Phi^*$ satisfying
+\[h(\Phi s, t) = h(s, \Phi^* t) \]
+for all sections $s$ and $t$. The bundle $E$ is said to be \emph{holomorphically trivial} if there is is an isomorphism $E \cong \~O_X^{\oplus r}$ (note that this is a \emph{global isomorphism}, not a local one like the one appearing in the definition of a locally free sheaf). For instance, when $X$ is a Riemann surface, we can take $E = X \times \C^r$ to be the trivial bundle of rank $r$.
+
+\begin{defn}
+Let $(E, \Phi)$ be a holomorphically trivial Higgs bundle equipped with a unitary connection $A$. \emph{Hitchin's equations} for $(E, \Phi)$ are the pair of nonlinear partial differential equations:
+\begin{equation}\label{eq:2.5}
+\begin{cases}
+F_A + [\Phi, \Phi^*] = 0, \\ 
+\bar{\partial}_A \Phi = 0.
+\end{cases}
+\end{equation}
+Where $F_A$ is the curvature of $A$, $\bar{\partial}_A$ is the $\overline{\partial}$-operator associated to the holomorphic structure on $E$, and $[\Phi, \Phi^*] = \Phi \wedge \Phi^* + \Phi^* \wedge \Phi$ is the commutator in $\End(E)$.  
+\end{defn}
+
+The equation $\bar{\partial}_A \Phi = 0$ simply says that $\Phi$ is holomorphic with respect to the holomorphic structure defined by $\bar{\partial}_A$, so the main content of Hitchin's equations lies in the first equation $F_A + [\Phi, \Phi^*] = 0$. We will note that Hitchin's equations can be generalized to the setting of nontrivial bundles on a K\"ahler manifold $(X, \omega)$ (as is done in Simpson's paper \cite{simpson92}). In this setting, Hitchin's first equation can be written as 
+\begin{equation}\label{eq:2.6}
+\sqrt{-1}\Lambda(F_A + [\Phi, \Phi^*]) = \mu(E),
+\end{equation}
+where $\Lambda$ is the contraction map associated to the K\"ahler form $\omega$ (on a Riemann surface, this is given by $\Lambda(F_A) = \tr(F_A )$). We write $f_{(A, \Phi)} := \sqrt{-1}\Lambda(F_A + [\Phi, \Phi^*])$ for simplicity. 
+
+One way to interpret the solutions to the equation (\ref{eq:2.6}) is as the absolute minimum for the \emph{Yang-Mills-Higgs functional}:
+\begin{equation} 
+    \YMH(A, \Phi) = \int_X \left|F_A + [\Phi, \Phi^*] \right|^2 \omega
+\end{equation}
+where $\omega$ denotes the K\"ahler form associated to a choice of metric on $X$. In the context of physics, Hitchin's equations are a dimensional reduction of the self-dual Yang-Mills equations from 4D to 2D. We now arrive at one of the major results on Higgs bundles, which is known as the \emph{Hitchin-Kobayashi correspondence}. Conceptually, this correspondence relates Higgs bundles (algebraic objects) with solutions to Hitchin's equations (analytic objects).
+\begin{thm}[Hitchin \cite{hitchin1987A}, Simpson \cite{simpson88}]
+    A Higgs bundle $(E, \Phi)$ is polystable if and only if it admits a Hermitian metric $h$ whose associated Chern connection $A = (\bar{\partial}_E, h)$ satisfies (\ref{eq:2.6}). 
+\end{thm}
+The reverse implication, while not completely trivial, is not terribly difficult to prove (see Proposition 2.16 in \cite{wentworth2015}). However, the forward implication (i.e., that every polystable Higgs bundle admits a metric satisfying (\ref{eq:2.6})) is highly non-trivial. A complete proof can be found in \S2.3 of Wentworth's notes \cite{wentworth2015}. It relies on the Uhlenbeck compactness theorem \cite{uhlenbeck1982}, which provides conditions under which a sequence of connections on a principal bundle admits a weakly convergent subsequence (modulo gauge transformations). Another discussion of this result can be found in Donaldson and Kronheimer's book \cite{DK1990}.
+
+\subsection{Related concepts and further reading}
+Higgs bundles are surprisingly versatile objects that appear in a wide range of modern research areas. Some examples of this are listed below.
+\begin{enumerate}[(i)]
+    \item Perhaps the most direct application is the one considered in Simpson's paper \cite{simpson92}, namely studying representations of the fundamental group $\pi_1(X)$ of a compact K\"ahler manifold $X$. This is the starting point for the theory of \emph{local systems}, which is still a very active area of research (an introduction to local systems for Riemann surfaces can be found in \cite{wentworth2015}).
+    \item Of course, Higgs bundles have many applications in gauge theory and physics, which were first explored in Hitchin's original paper \cite{hitchin1987A} and subsequent papers like \cite{hitchin92} and \cite{hitchin1987B}.
+    \item Higgs bundles and their moduli also play a role in mirror symmetry, especially in the subfield of SYZ theory \cite{BGG2007,HOP2023}.
+    \item The moduli stack of Higgs bundles has been studied in relation to Langlands dual groups \cite{derryberry2020}. Perhaps the most famous application of Higgs bundles in this area was in Ng\^o's fields-medal-winning proof of the fundamental lemma \cite{ngo2006}, where the geometry of the Hitchin fibration $\frak{M}_D^r \to \~B$ plays a crucial role.
+\end{enumerate}
+% The goal of this section is to give a glimpse into the \emph{Hitchin-Kobayashi correspondence} for compact Riemann sur{}faces of genus $g \ge 2$. This correspondence gives a necessary condition for a Higgs bundle $(E, \Phi)$ to admit a well-behaved metric (the precise meaning of ``well-behaved'' will be explained shortly).
+
+% \subsection{Connections and Hermitian metrics} We first begin by reviewing the basics of connections and metrics on bundles. 
+ 
+% \subsection{Hitchin's equations and the Yang-Mills-Higgs functional}
+
+% \subsection{The correspondence}
+
+% \section{Local systems}
+
+% \subsection{Connections}
+
+
+% \subsection{Representation varieties}
+
+% \subsection{Holomorphic connections and local systems}
+
+% \subsection{The Corlette-Donaldson theorem}
+
+
+\printbibliography
+
+\end{document}
+
+
+
+% Our next result gives a simple way to determine when a surjection $\pi: E \epi X$ between complex manifolds can be given the structure of a holomorphic vector bundle.
+
+% \begin{lem}
+%     Let $E$ be a set, $X$ a complex manifold of dimension $d$, and $\pi: E \epi X$ a surjection. Let $\frak{U} = \{z_i: U_i \to \C^d\}_{i \in I}$ be an atlas for $X$. Suppose that for all $x \in X$ the fibre $E_x := \pi^{-1}(x)$ is a complex vector space of dimension $n$. Suppose that for each $i$ we have maps
+%      \[h_i: \bigsqcup_{x \in U_i}E_x \to U_i \times \C^n\]
+%     which are fibre-preserving, i.e., we have a commutative diagram
+%     \[\begin{tikzcd}[sep=scriptsize]
+%     {\displaystyle \bigsqcup_{x \in U_i}E_x} && {U_i \times \C^n} \\
+%     & {U_i}
+%     \arrow["{h_i}", from=1-1, to=1-3]
+%     \arrow["\pi"', from=1-1, to=2-2]
+%     \arrow["{\pr_{U_i}}", from=1-3, to=2-2]
+% \end{tikzcd}\]
+% and suppose further that each $h_i$ restricts to a linear isomorphism on the fibres whose transition functions satisfy the cocycle condition (\ref{eq:1.2}) in $Z^1 \left(\mathfrak{U}, \GL_n \left(\~O_X \right) \right)$. Then $\pi: E \epi X$ is a holomorphic vector bundle with atlas $\left\{h_i :\bigsqcup_{x \in U_i}E_x \to U_i \times \C^n \right\}_{i \in I}$.
+% \end{lem}
+
+% \begin{proof}
+%     See \cite{bellemare2021}
+% \end{proof}
+
+% \begin{proof}
+%     Write $E_{U_i} = \bigsqcup_{x \in U_i} E_x$. To topologize $E$, we first put a topology on each $E_{U_i}$. For each $U_i$, declare a subset $V \subseteq E_{U_i}$ to be open if and only if $h_i(V) \subseteq U_i \times \C^n$ is open, so that the maps $h_i$ are forced to be continuous. If now if $V \subseteq E$, we put a topology on $E$ by declaring $V$ to be open if and only if $V \cap E_{U_i}$ if open for all $i$. This defines a topology on $E$ with open sets $E_{U_i}$. The maps $h_i$ are automatically homeomorphisms, and since the projection $\pi$ factors as $\pi = \pr_{U_i} \circ h_i$ on each $E_{U_i}$, it is a continuous map.  
+
+%     We now show that $E$ has the structure of a complex manifold.
+% \end{proof}
+
+% That is, for each $x \in X$, $\psi$ induces a traceless linear endomorphism 
+% \[\psi_x := \psi(x): E_x^* \to E_x^*, \quad \tr(\psi_x) = 0\]
+
+% Moreover if $\{z_i : U_i \cap U \to \C^n\}$ is an atlas of $U$, then by defining $\psi_i$ by
+% \[\psi_i: \quad \pi^{-1}(U) \To{\vp_i} (U_i \cap U) \times \C^n \To{z_i \times \id} (U_i \cap U) \times \C^n\]
+% we obtain an atlas $\{(U_i \cap U, \psi_i)\}$ for $\pi^{-1}(U)$. 
+
+% \subsubsection{Connections}
+% Let $E \to X$ denote a holomorphic vector bundle. It is natural to ask if there is a uniform way to ``move'' from one fibre to another in this bundle. For example, if $E = TX$ is the tangent bundle of $X$, it is completely reasonable to ask whether there is a way to transport a vector from $T_x X$ to $T_y X$ for distinct points $x, y \in X$. The notion of a connection allows us to accomplish this task.
+
+% \begin{defn}
+%     A \emph{connection} on a holomorphic vector bundle $E \to X$ is a $\C$-linear map 
+%     \[\nabla:        \]
+% \end{defn}
+% \subsection{Stability}
+
+% If $\pi: E \to X$ has a local trivialization $\{(U_i, \vp_i)\}_{i \in I}$, we define a family of continuous functions $f_i: U_i \cap U \to \C^r$, where $f_i$ is given by the following composite: 
+% \[f_i: \quad U_i \cap U \To{f|_{U_i \cap U}} \pi^{-1}(U_i \cap U) \To{\vp_i} (U_i \cap U) \times \C^r \To{\pr_{\C^r}} \C^r \]
+% (in other words, $f_i$ is defined by $\vp_i(f(x)) = (x, f_i(x))$). Moreover, $f_i: U_i \cap U \to \C^r$ is holomorphic for all $i$, being the composite of holomorphic maps. Therefore, we can identify a holomorphic section with a 
